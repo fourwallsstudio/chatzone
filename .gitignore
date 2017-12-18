@@ -1,0 +1,14 @@
+venv/
+*.log
+.DS_Store
+.env
+.flaskenv
+*.pyc
+*.pyo
+env
+env*
+dist
+build
+.eggs/
+*.egg
+*.egg-info
