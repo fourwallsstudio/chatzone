@@ -1,17 +1,20 @@
+attrs==17.3.0
 bcrypt==3.1.4
 cffi==1.11.2
-## !! Could not determine repository location
-chatzone==1.0
 click==6.7
 Flask==0.12.2
 Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.3
 Flask-SQLAlchemy==2.3.2
+Flask-Testing==0.6.2
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
+pluggy==0.6.0
+py==1.5.2
 pycparser==2.18
 PyJWT==1.5.3
+pytest==3.3.1
 python-dotenv==0.7.1
 six==1.11.0
 SQLAlchemy==1.1.15
