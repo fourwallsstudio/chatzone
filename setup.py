@@ -6,6 +6,10 @@ setup(
     packages=['chatzone'],
     include_package_data=True,
     zip_safe=False,
+    entry_points="""
+        [flask.commands]
+        create_db=mypackage.commands:create_db_command
+    """,
     install_requires=[
         'flask',
     ],

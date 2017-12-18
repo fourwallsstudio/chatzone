@@ -3,6 +3,7 @@ import os
 from flask import Flask, json, jsonify
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -19,5 +20,17 @@ app.config.from_envvar('CHATZONE_SETTINGS', silent=True)
 
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+import chatzone.models
+
+
+def create_db():
+    db.create_all()
+
+
+def drop_db():
+    db.drop_all()
+
 
 import chatzone.views

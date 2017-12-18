@@ -1,8 +1,10 @@
+import os
 import unittest
 
 from flask import current_app
 from flask_testing import TestCase
 from chatzone import app
+user = os.getenv('USER')
 
 
 class TestDevelopmentConfig(TestCase):
@@ -14,7 +16,7 @@ class TestDevelopmentConfig(TestCase):
         self.assertTrue(app.config['DEBUG'] is True)
         self.assertFalse(current_app is None)
         self.assertTrue(
-                app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://postgres:@localhost/chatzone_dev'
+                app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://' + user + ':@localhost/chatzone_dev'
         )
 
 
@@ -26,7 +28,7 @@ class TestTestsingConfig(TestCase):
     def test_app_is_testing(self):
         self.assertTrue(app.config['DEBUG'] is True)
         self.assertTrue(
-                app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://postgres:@localhost/chatzone_test'
+                app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://' + user + ':@localhost/chatzone_test'
         )
 
 

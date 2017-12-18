@@ -1,6 +1,7 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-postgres_local_base = 'postgresql://postgres:@localhost/'
+user = os.getenv('USER')
+postgres_local_base = 'postgresql://' + user + ':@localhost/'
 
 class Config(object):
     DEBUG = False
