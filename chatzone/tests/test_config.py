@@ -13,6 +13,8 @@ class TestDevelopmentConfig(TestCase):
         return app
 
     def test_app_is_development(self):
+        secret_key = os.getenv('SECRET_KEY', 'no key')
+        self.assertTrue(secret_key is not 'no key')
         self.assertTrue(app.config['DEBUG'] is True)
         self.assertFalse(current_app is None)
         self.assertTrue(
@@ -26,6 +28,8 @@ class TestTestsingConfig(TestCase):
         return app
 
     def test_app_is_testing(self):
+        secret_key = os.getenv('SECRET_KEY', 'no key')
+        self.assertTrue(secret_key is not 'no key')
         self.assertTrue(app.config['DEBUG'] is True)
         self.assertTrue(
                 app.config['SQLALCHEMY_DATABASE_URI'] == 'postgresql://' + user + ':@localhost/chatzone_test'

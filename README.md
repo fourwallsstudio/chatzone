@@ -13,3 +13,9 @@ setuptools:
 run server:
 `export FLASK_APP=chatzone`
 `flask run`
+
+db:
+`flask create_db`
+`flask db init`
+`flask db migrate`
+`flask db upgrade`
