@@ -9,7 +9,7 @@ auth_blueprint = Blueprint('auth', __name__)
 
 class SignUpAPI(MethodView):
     def post(self):
-        post_data = request.get_json()
+        post_data = request.form
         user = User.query.filter_by(username=post_data.get('username')).first()
         if not user:
             try:
@@ -23,7 +23,9 @@ class SignUpAPI(MethodView):
                 responseObject = {
                     'status': 'success',
                     'message': 'Successfully signed up.',
-                    'auth_token': auth_token.decode()
+                    'auth_token': auth_token.decode(),
+                    'id': user.id,
+                    'username': user.username
                 }
                 return make_response(jsonify(responseObject)), 201
             except Exception as e:
@@ -43,7 +45,7 @@ class SignUpAPI(MethodView):
 
 class LoginAPI(MethodView):
     def post(self):
-        post_data = request.get_json()
+        post_data = request.form
         try:
             user = User.query.filter_by(
                 username=post_data.get('username')
@@ -57,7 +59,9 @@ class LoginAPI(MethodView):
                         responseObject = {
                             'status': 'success',
                             'message': 'Successfully logged in.',
-                            'auth_token': auth_token.decode()
+                            'auth_token': auth_token.decode(),
+                            'id': user.id,
+                            'username': user.username
                         }
                         return make_response(jsonify(responseObject)), 200
                 else:
@@ -102,7 +106,7 @@ class CurrentUserAPI(MethodView):
                 responseObject = {
                     'status': 'success',
                     'data': {
-                        'user_id': user.id,
+                        'id': user.id,
                         'username': user.username,
                     }
                 }

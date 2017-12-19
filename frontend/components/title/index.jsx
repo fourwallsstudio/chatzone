@@ -8,13 +8,15 @@ const Container = styled.div`
 const Text = styled.h1`
   color: ghostwhite;
   font-size: 56px;
-  line-height: 40px;
+  line-height: 56px;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
   font-style: italic;
   margin-right: 5px;
 `
 const Block = styled.div`
   background-color: ghostwhite;
-  height: 40px;
+  height: 56px;
   width: 300px;
 `
 

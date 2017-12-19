@@ -1,9 +1,9 @@
 import React from 'react';
-import Title from 'components/title';
+import Landing from 'components/landing';
 
 const App = () => (
   <section id="app-container" style={{ background: 'black', height: '100vh', padding: 20 }} > 
-    <Title />
+    <Landing />
   </section>
 )
 
