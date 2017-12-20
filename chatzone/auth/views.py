@@ -9,7 +9,7 @@ auth_blueprint = Blueprint('auth', __name__)
 
 class SignUpAPI(MethodView):
     def post(self):
-        post_data = request.form
+        post_data = request.form if request.form else request.get_json()
         user = User.query.filter_by(username=post_data.get('username')).first()
         if not user:
             try:
@@ -45,7 +45,7 @@ class SignUpAPI(MethodView):
 
 class LoginAPI(MethodView):
     def post(self):
-        post_data = request.form
+        post_data = request.form if request.form else request.get_json()
         try:
             user = User.query.filter_by(
                 username=post_data.get('username')

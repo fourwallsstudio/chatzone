@@ -3,21 +3,22 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
-  width: 620px;
+  width: 100%;
+  margin: 0 auto;
 `
 const Text = styled.h1`
   color: ghostwhite;
   font-size: 56px;
-  line-height: 56px;
+  line-height: 38px;
   font-family: 'Roboto Mono', monospace;
   font-weight: 700;
   font-style: italic;
-  margin-right: 5px;
 `
 const Block = styled.div`
   background-color: ghostwhite;
-  height: 56px;
-  width: 300px;
+  height: 42px;
+  width: 100%;
+  border-radius: 2px;
 `
 
 const Title = () => (

@@ -3,26 +3,43 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import styled from 'styled-components';
 
 const Form = styled.form`
+  position: relative;
   display: flex;
   justify-content: space-between;
+  width: 100%;
   font-family: 'Roboto', monospace;
   color: ghostwhite;
   font-size: 24px;
+  margin-top: 10px;
 `
 const FormField = styled.div`
-  border: solid 2px ghostwhite;
-  height: 60px;
+  position: relative;
+  width: 100%;
+  border: solid 1px ghostwhite;
+  height: 42px;
+  padding-left: 10px;
+  line-height: 42px;
+  margin-right: 10px;
   input::webkit-input-placeholder {
     color: lightgrey;
+    line-height: 42px;
   }
   span {
-    position: relative;
-    top: -30px;
-    left: 0;
+    position: absolute;
+    top: 34px;
+    left: 10px;
+    font-size: 12px;
   }
 `
 const Button = styled.button`
-
+  border: solid 1px ghostwhite;
+  padding: 0 10px;
+`
+const TextButton = styled.button`
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  font-size: 12px;
 `
 
 const validate = (values) => {
@@ -42,9 +59,11 @@ const renderInputField = ({ input, label, name, type, meta: { touched, error }})
   </FormField>
 )
 
-let SessionForm = ({ handleSubmit, formType }) => {
+let SessionForm = props => {
+  const { handleSubmit, formType, updateSessionFormType } = props;
+  
   return (
-    <Form onSubmit={ handleSubmit } >
+    <Form onSubmit={ handleSubmit }>
       <Field
         name='username'
         component={ renderInputField }
@@ -61,6 +80,10 @@ let SessionForm = ({ handleSubmit, formType }) => {
         type='submit'>
         { formType }
       </Button>
+
+      <TextButton onClick={ updateSessionFormType } >
+        { formType === 'login' ? 'signup' : 'login' }
+      </TextButton>
     </Form>
   )
 }

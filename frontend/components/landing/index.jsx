@@ -1,12 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import Title from 'components/title';
 import SessionForm from 'components/session_form';
 import { login, signup } from 'reducers/session_reducer';
+import { updateSessionFormType } from 'reducers/ui_reducer';
+import { sessionFormTypeSelector } from 'reducers/selectors';
+
+const Container = styled.div`
+  width: 60%;
+  min-width: 730px;
+  margin: 0 auto;
+`
 
 class Landing extends React.Component {
 
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const formData = new FormData();
 
     formData.append('username', values.get('username'));
@@ -19,23 +28,32 @@ class Landing extends React.Component {
     }
   }
 
+  handleUpdateFormType = () => {
+    const newFormType = this.props.formType === 'login' ? 'signup' : 'login';
+    this.props.updateSessionFormType(newFormType);
+  }
+
   render() {
     return (
-      <section>
+      <Container>
         <Title />
-        <SessionForm formType={ this.props.formType } onSubmit={ this.handleSubmit } />
-      </section>
+        <SessionForm 
+          formType={ this.props.formType } 
+          onSubmit={ this.handleSubmit } 
+          updateSessionFormType={ this.handleUpdateFormType } />
+      </Container>
     )
   }
 }
 
 const mapStateToProps = state => ({
-  formType: 'login',
+  formType: sessionFormTypeSelector(state), 
 });
 
 const mapDispatchToProps = dispatch => ({
   login: formData => dispatch(login(formData)),
   signup: formData => dispatch(signup(formData)),
+  updateSessionFormType: formType => dispatch(updateSessionFormType(formType)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Landing);
