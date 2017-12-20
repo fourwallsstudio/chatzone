@@ -10,7 +10,7 @@ import { sessionFormTypeSelector } from 'reducers/selectors';
 const Container = styled.div`
   width: 60%;
   min-width: 730px;
-  margin: 0 auto;
+  margin: 300px auto 0 auto;
 `
 
 class Landing extends React.Component {
