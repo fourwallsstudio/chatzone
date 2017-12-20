@@ -123,7 +123,6 @@ class CurrentUserAPI(MethodView):
 
 class LogoutAPI(MethodView):
     def post(self):
-        print('logout headers: ', request.headers)
         auth_header = request.headers.get('Authorization')
         if auth_header:
             auth_token = auth_header.split(" ")[1]
@@ -148,6 +147,7 @@ class LogoutAPI(MethodView):
                     }
                     return make_response(jsonify(responseObject)), 200
             else:
+                print('auth_token error: ', resp)
                 responseObject = {
                     'status': 'fail',
                     'message': resp

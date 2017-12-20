@@ -5,6 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
+from flask_socketio import SocketIO#, emit, join_room, leave_room
 from dotenv import load_dotenv
 
 # load dotenv in the base root
@@ -18,6 +19,7 @@ print('static: ', static_file_dir)
 
 app = Flask(__name__)
 CORS(app)
+socketio = SocketIO(app)
 
 app.config.from_object(os.getenv('CHATZONE_SETTINGS'))
 app.config.from_envvar('CHATZONE_SETTINGS', silent=True)
@@ -38,6 +40,10 @@ def drop_db():
 
 
 import chatzone.views
+import chatzone.chat.views
 
 from chatzone.auth.views import auth_blueprint
 app.register_blueprint(auth_blueprint)
+
+if __name__ == '__main__':
+    socketio.run(app)
