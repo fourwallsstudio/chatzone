@@ -1,5 +1,15 @@
 import React from 'react';
-import styled from  'styled-components';
+import styled, { keyframes } from  'styled-components';
+
+const throb = keyframes`
+  from {
+    transform: scale(1, 1);
+  }
+
+  to {
+    transform: scale(1.2, 1.2);
+  }
+`
 
 const BackgroundImg = styled.div`
   position: absolute; 
@@ -10,7 +20,11 @@ const BackgroundImg = styled.div`
   filter: blur(5px); 
   width: 110vw; 
   height: 110vh;
-  padding: 20 
+  animation-name: ${throb};
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
 `
 const Background = () => <BackgroundImg />;
 
