@@ -5,7 +5,7 @@ import Title from 'components/title';
 import SessionForm from 'components/session_form';
 import { login, signup } from 'reducers/session_reducer';
 import { updateSessionFormType } from 'reducers/ui_reducer';
-import { sessionFormTypeSelector } from 'reducers/selectors';
+import { sessionFormTypeSelector, currentUserSelector } from 'reducers/selectors';
 
 const Container = styled.div`
   width: 60%;
@@ -34,19 +34,21 @@ class Landing extends React.Component {
   }
 
   render() {
-    return (
-      <Container>
-        <Title />
-        <SessionForm 
-          formType={ this.props.formType } 
-          onSubmit={ this.handleSubmit } 
-          updateSessionFormType={ this.handleUpdateFormType } />
-      </Container>
-    )
+    return !this.props.loggedIn 
+           ? (
+              <Container>
+                <Title />
+                <SessionForm 
+                  formType={ this.props.formType } 
+                  onSubmit={ this.handleSubmit } 
+                  updateSessionFormType={ this.handleUpdateFormType } />
+              </Container>
+           ) : null;
   }
 }
 
 const mapStateToProps = state => ({
+  loggedIn: Boolean(currentUserSelector(state)),
   formType: sessionFormTypeSelector(state), 
 });
 

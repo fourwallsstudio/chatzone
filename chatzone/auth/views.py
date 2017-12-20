@@ -105,10 +105,8 @@ class CurrentUserAPI(MethodView):
                 user = User.query.filter_by(id=resp).first()
                 responseObject = {
                     'status': 'success',
-                    'data': {
-                        'id': user.id,
-                        'username': user.username,
-                    }
+                    'id': user.id,
+                    'username': user.username
                 }
                 return make_response(jsonify(responseObject)), 200
             responseObject = {
@@ -125,6 +123,7 @@ class CurrentUserAPI(MethodView):
 
 class LogoutAPI(MethodView):
     def post(self):
+        print('logout headers: ', request.headers)
         auth_header = request.headers.get('Authorization')
         if auth_header:
             auth_token = auth_header.split(" ")[1]
