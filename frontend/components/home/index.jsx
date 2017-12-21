@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Title from 'components/title';
-import ChatRoomIndex from 'components/chat_rooms_index';
 import { logout, fetchCurrentUser } from 'reducers/session_reducer';
 import { currentUserSelector } from 'reducers/selectors';
 import { getAuthTokenFromLocalStorage } from '../../util/session_util';
@@ -48,7 +47,6 @@ class Home extends React.Component {
           <Welcome>{ `Welcome ${ this.props.currentUser.get('username') }` }</Welcome>
           <LogoutButton onClick={ this.handleLogout }>logout</LogoutButton>
         </Header>
-        <ChatRoomIndex />
       </Container>
     ) : null;
   }

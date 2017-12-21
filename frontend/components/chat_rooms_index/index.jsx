@@ -1,15 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 
-import { fetchChatRooms } from 'reducers/chatroom_reducer';
+import { fetchChatRooms, joinChat } from 'reducers/chatroom_reducer';
 import { chatroomSelector, currentUserSelector } from 'reducers/selectors';
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin-top: 40px;
+  width: 80%;
+  margin: 40px auto 0 auto;
 `
 const ChatRoomButton = styled.button`
   width: 25%;
@@ -31,29 +34,35 @@ class ChatRoomIndex extends React.Component {
   }
 
   handleClick = e => {
-    console.log('on click: ', e.target.value);
+    const data =  {
+      username: this.props.currentUser.get('username'),
+      chatroom: e.target.value,
+    };
+    this.props.joinChat(data);
   }
 
   render() {
-    const cu = this.props.currentUser;
+    console.log('CHATROOMINDEX', this.props.match.url);
     const chatrooms = this.props.chatrooms.map( cr => ( 
-       <ChatRoomButton key={`${cr.id}: ${cr.title}`} onClick={this.handleClick} value={cr.title}>{cr.title}</ChatRoomButton>
+       <ChatRoomButton key={cr.title} onClick={this.handleClick} value={cr.title}>{cr.title}</ChatRoomButton>
     ));
-    return (
+    return !!this.props.currentUser ? (
       <Container>
         { chatrooms }
       </Container>
-    )
+    ) : null;
   }
 }
 
 const mapStateToProps = state => ({
-  chatrooms: chatroomSelector(state),
   currentUser: currentUserSelector(state),
+  chatrooms: chatroomSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchChatRooms: () => dispatch(fetchChatRooms()),
+  redirectToChatroom: cr => dispatch(push(`/${cr}`)),
+  joinChat: data => dispatch(joinChat(data)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatRoomIndex);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatRoomIndex));

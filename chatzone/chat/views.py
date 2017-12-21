@@ -5,14 +5,15 @@ from chatzone import socketio
 @socketio.on('join')
 def on_join(data): 
     data = json.loads(data)
+    print('joinn', data)
     username = data['username']
-    room = data['room']
+    room = data['chatroom']
     join_room(room)
     msg_data = {
         'message': username + ' has entered the zone',
         'room': room
     }
-    emit('message', msg_data, broadcast=True)
+    emit('joined_chat', msg_data, broadcast=True)
 
 @socketio.on('leave')
 def on_leave(data):
@@ -24,7 +25,7 @@ def on_leave(data):
         'message': username + ' has left the zone',
         'room': room
     }
-    emit('message', msg_data, broadcast=True) 
+    emit('left_chat', msg_data, broadcast=True) 
 
 
 

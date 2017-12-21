@@ -1,5 +1,6 @@
 import { take, fork, call, put } from 'redux-saga/effects';
 import axios from 'axios';
+import { push } from 'react-router-redux';
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -47,6 +48,7 @@ function* handleLogout() {
     const res = yield call(logout);
     removeAuthTokenFromLocalStorage();
     yield put({ type: LOGOUT_SUCCESS, payload: res.data });
+    yield put(push('/')); 
   } catch (error) {
     yield put({ type: LOGOUT_ERROR, payload: error });
   }
