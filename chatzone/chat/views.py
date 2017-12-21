@@ -10,8 +10,8 @@ def on_join(data):
     room = data['chatroom']
     join_room(room)
     msg_data = {
-        'message': username + ' has entered the zone',
-        'room': room
+        'username': username,
+        'chatroom': room
     }
     emit('joined_chat', msg_data, broadcast=True)
 
@@ -22,8 +22,8 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     msg_data = {
-        'message': username + ' has left the zone',
-        'room': room
+        'username': username,
+        'chatroom': room
     }
     emit('left_chat', msg_data, broadcast=True) 
 

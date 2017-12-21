@@ -1,4 +1,5 @@
 import { take, fork, call, put } from 'redux-saga/effects';
+import { eventChannel, END } from 'redux-saga';
 import axios from 'axios';
 import io from 'socket.io-client';
 import { push } from 'react-router-redux';
@@ -8,6 +9,9 @@ import {
   FETCH_CHATROOMS_ERROR,
   JOIN_CHAT,
   LEAVE_CHAT,
+  UPDATE_CURRENT_CHAT,
+  ADD_CHAT_MEMBER,
+  REMOVE_CHAT_MEMBER,
 } from 'reducers/chatroom_reducer';
 
 const fetchChatRooms = () => axios.get('/chatrooms');
@@ -29,15 +33,11 @@ export function* waitingFetchChatRooms() {
 }
 
 const socket = io();
-
-socket.on('joined_chat', data => console.log('msg', data));
-socket.on('left_chat', data => console.log('msg', data));
-
 const joinChat = data => socket.emit('join', data);
 
 function* handleJoinChat(data) {
-  console.log('handlejoin', data);
   yield call(joinChat, JSON.stringify(data));
+  yield put({ type: UPDATE_CURRENT_CHAT, payload: data.chatroom });
   yield put(push(`/${data.chatroom}`));  
 }
 
@@ -56,3 +56,34 @@ export function* connectionFlow() {
     yield call(handleLeaveChat, leaveData);
   }
 };
+
+function socketInitChannel() {
+  return eventChannel( emitter => {
+    
+    const joinHandler = data => {
+      emitter({ type: ADD_CHAT_MEMBER, payload: data })
+    }
+
+    const leftHandler = data => {
+      emitter({ type: REMOVE_CHAT_MEMBER, payload: data })
+    }
+ 
+    socket.on('joined_chat', data => {
+      joinHandler(data);
+    });
+     
+    socket.on('left_chat', data => {
+      leftHandler(data);
+    });
+
+    return () => {}
+  });
+}
+
+export function* socketSagas() {
+  const channel = yield call(socketInitChannel)
+  while (true) {
+    const action = yield take(channel)
+    yield put(action);
+  }
+}

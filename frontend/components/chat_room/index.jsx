@@ -1,45 +1,34 @@
 import React from 'react';
-import io from 'socket.io-client';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { chatroomSelector, currentUserSelector } from 'reducers/selectors';
+import { 
+  currentChatSelector, 
+  currentUserSelector, 
+  chatMembersSelector,
+} from 'reducers/selectors';
+
+import MembersAside from './members_aside';
 
 const Container = styled.div`
   display: flex;
-  color: ghostwhite;
+  width: 80%;
+  height: 460px;
+  border: solid 1px ghostwhite;
+  margin: 40px auto 0 auto;
+  padding: 10px;
 `
 
 class ChatRoom extends React.Component {
 
-  socket = io('http://localhost:5000');
-
-  componentDidMount() {
-   /* const data = JSON.stringify({ 
-      username: this.props.currentUser.username, 
-      room: this.props.chatroom,
-    });
-    this.socket.emit('join', data);
-    this.socket.on('message', data => console.log('msg: ', data));
-    */
-  }
-
-  componentWillUnmount() {
-   /* const data = JSON.stringify({ 
-      username: this.props.currentUser.username, 
-      room: this.props.chatroom,
-    });
-    this.socket.emit('leave', data);
-    */
-  }
-
   render() {
-    const validChat = this.props.chatrooms.includes(this.props.chatroom) 
-      && !!this.props.currentUser;
-   
-      return validChat ? (
+    const validChat = !!this.props.currentUser && !!this.props.currentChat;
+    const members = this.props.members.toJS();
+    
+    return validChat ? (
       <Container>
-        { this.props.chatroom }
+        <MembersAside 
+          members={members} 
+          chatroom={this.props.currentChat} /> 
       </Container>
     ) : null;
   }
@@ -47,12 +36,12 @@ class ChatRoom extends React.Component {
 
 const mapStateToProps = (state, { match }) => ({
   currentUser: currentUserSelector(state),
-  chatrooms: chatroomSelector(state),
-  chatroom: match.url.split('/')[1],
+  currentChat: currentChatSelector(state),
+  members: chatMembersSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
 
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatRoom));
+export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

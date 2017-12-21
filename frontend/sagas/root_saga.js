@@ -3,6 +3,7 @@ import { loginFlow, signupFlow, currentUserFlow } from 'sagas/session_saga';
 import { 
   waitingFetchChatRooms,
   connectionFlow,
+  socketSagas,
 } from 'sagas/chatroom_saga';
 
 export default function* rootSaga() {
@@ -12,5 +13,6 @@ export default function* rootSaga() {
     currentUserFlow(),
     waitingFetchChatRooms(),
     connectionFlow(),
+    socketSagas(),
   ]);
 };

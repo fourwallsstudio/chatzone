@@ -12,7 +12,7 @@ const App = () => (
     <Landing />
     <Home />
     <Route exact path='/' component={ ChatRoomIndex } />
-    <Route exact path='/:chatroom' component={ ChatRoom } />
+    <ChatRoom /> 
   </section>
 )
 
