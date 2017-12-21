@@ -48,6 +48,7 @@ class User(db.Model):
         except jwt.InvalidTokenError:
             return 'Invalid token. Please log in again.'
 
+
 # TODO: move this to Redis db
 class BlacklistToken(db.Model):
     __tablename__ = 'blacklist_tokens'
@@ -67,3 +68,20 @@ class BlacklistToken(db.Model):
     def check_blacklist(auth_token):
         res = BlacklistToken.query.filter_by(token=str(auth_token)).first()
         return True if res else False
+
+
+class ChatRoom(db.Model):
+    __tablename__ = 'chat_rooms'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(255), unique=True, nullable=False)
+    created_on = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, title):
+        self.title = title
+        self.created_on = datetime.datetime.now()
+    
+    def __repr__(self):
+        return '<id: title: {}'.format(self.title)
+
+
