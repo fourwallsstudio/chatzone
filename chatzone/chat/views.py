@@ -14,8 +14,11 @@ def on_join(data):
         'username': username,
         'chatroom': room
     }
-    
-    redisCache.rpush(room, username)
+   
+    members = list(map((lambda x: x.decode('utf-8')), redisCache.lrange(room, 0, -1)))
+    if username not in members:
+        redisCache.rpush(room, username)
+
     print('joined: ', redisCache.lrange(room, 0, -1))
     emit('joined_chat', msg_data, room=room)
 
