@@ -1,9 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Title from 'components/title';
+import ChatRoomIndex from '../chat_rooms_index';
+import ChatRoom from '../chat_room';
 import { logout, fetchCurrentUser } from 'reducers/session_reducer';
-import { currentUserSelector } from 'reducers/selectors';
+import { leaveChat } from 'reducers/chatroom_reducer';
+import { currentUserSelector, currentChatSelector } from 'reducers/selectors';
 import { getAuthTokenFromLocalStorage } from '../../util/session_util';
 
 const Container = styled.div`
@@ -35,18 +39,25 @@ class Home extends React.Component {
   }
 
   handleLogout = () => {
-    const id = this.props.currentUser.get('id');
-    this.props.logout(id);
+    const { currentChat, currentUser, logout, leaveChat } = this.props;
+    
+    if (currentChat) leaveChat({ username: currentUser.get('username'), chatroom: currentChat });
+    const id = currentUser.get('id');
+    logout(id);
   }
 
   render() {
-    return !!this.props.currentUser ? (
+    const { currentUser, currentChat } = this.props;
+    
+    return !!currentUser ? (
       <Container>
-        <Title />
         <Header>
-          <Welcome>{ `Welcome ${ this.props.currentUser.get('username') }` }</Welcome>
+          <Welcome>{ `Welcome ${ currentUser.get('username') }` }</Welcome>
           <LogoutButton onClick={ this.handleLogout }>logout</LogoutButton>
         </Header>
+        <Title />
+        <Route exact path='/' component={ ChatRoomIndex } />
+        { currentChat && <ChatRoom /> }
       </Container>
     ) : null;
   }
@@ -55,11 +66,13 @@ class Home extends React.Component {
 const mapStateToProps = state => ({
   currentUser: currentUserSelector(state),
   authToken: getAuthTokenFromLocalStorage(),
+  currentChat: currentChatSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: id => dispatch(logout(id)),
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+  leaveChat: data => dispatch(leaveChat(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -11,7 +11,6 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  width: 80%;
   margin: 40px auto 0 auto;
 `
 const ChatRoomButton = styled.button`
@@ -29,7 +28,6 @@ const ChatRoomButton = styled.button`
 class ChatRoomIndex extends React.Component {
 
   componentWillMount() {
-    console.log('fetching rooms');
     this.props.fetchChatRooms();
   }
 
@@ -42,7 +40,6 @@ class ChatRoomIndex extends React.Component {
   }
 
   render() {
-    console.log('CHATROOMINDEX', this.props.match.url);
     const chatrooms = this.props.chatrooms.map( cr => ( 
        <ChatRoomButton key={cr.title} onClick={this.handleClick} value={cr.title}>{cr.title}</ChatRoomButton>
     ));

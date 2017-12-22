@@ -1,4 +1,4 @@
-from chatzone import app, static_file_dir, db
+from chatzone import app, static_file_dir, db, redisCache
 from flask import jsonify, send_from_directory, make_response
 from chatzone.models import ChatRoom
 
@@ -13,7 +13,11 @@ def chatrooms():
     for cr in chatrooms:
         data.append({ 'id': cr.id, 'title': cr.title });
 
-    data = jsonify(data)
-    return make_response(data), 200
+    return make_response(jsonify(data)), 200
 
-
+@app.route('/members/<chatroom>')
+def members(chatroom):
+    members = redisCache.lrange(chatroom, 0, -1)
+    data = list(map((lambda x: x.decode('utf-8')), members))
+    print('members ', chatroom, data)
+    return make_response(jsonify(data)), 200

@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  width: 20%;
   border: solid 1px ghostwhite;
   overflow: hidden;
+  height: 100%;
 `
 
 const MemberIndex = styled.div`
@@ -23,15 +23,17 @@ const Title = styled.h1`
   text-align: center;
 `
 
-const MembersAside = props => {
-  const members = props.members.map( m => <Member key={m.username}>{m.username}</Member> );
+const MembersAside = ({ members, currentUser, chatroom }) => {
+  const membersWithoutCurrentUser = members.filter( m => m !== currentUser.username );
+  console.log('members aside:', membersWithoutCurrentUser);
+  const memberEls = membersWithoutCurrentUser.map((m, i) => <Member key={`${i} ${m}`}>{m}</Member> );
 
   return (
     <Container>
       <MemberIndex>
-        { members }
+        { memberEls }
       </MemberIndex>
-      <Title>{ props.chatroom }</Title>
+      <Title>{ chatroom }</Title>
     </Container>
   )
 };

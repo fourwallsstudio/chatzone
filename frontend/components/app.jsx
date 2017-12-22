@@ -11,8 +11,6 @@ const App = () => (
     <Background />
     <Landing />
     <Home />
-    <Route exact path='/' component={ ChatRoomIndex } />
-    <ChatRoom /> 
   </section>
 )
 

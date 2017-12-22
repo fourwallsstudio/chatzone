@@ -12,6 +12,9 @@ import {
   UPDATE_CURRENT_CHAT,
   ADD_CHAT_MEMBER,
   REMOVE_CHAT_MEMBER,
+  FETCH_MEMBERS_REQUEST,
+  FETCH_MEMBERS_SUCCESS,
+  FETCH_MEMBERS_ERROR,
 } from 'reducers/chatroom_reducer';
 
 const fetchChatRooms = () => axios.get('/chatrooms');
@@ -19,6 +22,7 @@ const fetchChatRooms = () => axios.get('/chatrooms');
 function* handleFetchChatRooms() {
   try {
     const res = yield call(fetchChatRooms);
+    console.log('members res: ', res.data);
     yield put({ type: FETCH_CHATROOMS_SUCCESS, payload: res.data });
   } catch (error) {
     yield put({ type: FETCH_CHATROOMS_ERROR, payload: error });
@@ -29,6 +33,24 @@ export function* waitingFetchChatRooms() {
   while (true) {
     yield take(FETCH_CHATROOMS_REQUEST);
     yield fork(handleFetchChatRooms);
+  }
+}
+
+const fetchMembers = chatroom => axios.get(`/members/${chatroom}`);
+
+function* handleFetchMembers(chatroom) {
+  try {
+    const res = yield call(fetchMembers, chatroom);
+    yield put({ type: FETCH_MEMBERS_SUCCESS, payload: res.data });
+  } catch(error) {
+    yield put({ type: FETCH_MEMBERS_ERRORS, payload: error });
+  }
+}
+
+export function* waitingFetchMembers() {
+  while (true) {
+    const { chatroom } = yield take(FETCH_MEMBERS_REQUEST);
+    yield fork(handleFetchMembers, chatroom)
   }
 }
 
@@ -45,6 +67,7 @@ const leaveChat = data => socket.emit('leave', data);
 
 function* handleLeaveChat(data) {
   yield call(leaveChat, JSON.stringify(data));
+  yield put({ type: UPDATE_CURRENT_CHAT, payload: null });
   yield put(push('/'));
 }
 

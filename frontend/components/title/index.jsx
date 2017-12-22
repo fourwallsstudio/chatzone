@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: flex;
   width: 100%;
-  margin: 0 auto;
+  margin: 10px auto;
 `
 const Text = styled.h1`
   color: ghostwhite;

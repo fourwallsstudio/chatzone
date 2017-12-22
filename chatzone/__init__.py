@@ -1,4 +1,5 @@
 import os
+import redis
 
 from flask import Flask, json, jsonify
 from flask_bcrypt import Bcrypt
@@ -7,6 +8,9 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 from flask_socketio import SocketIO#, emit, join_room, leave_room
 from dotenv import load_dotenv
+
+# redis pub/sub
+redisCache = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 # load dotenv in the base root
 APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
