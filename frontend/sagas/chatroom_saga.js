@@ -55,6 +55,8 @@ export function* waitingFetchMembers() {
 }
 
 const socket = io();
+
+
 const joinChat = data => socket.emit('join', data);
 
 function* handleJoinChat(data) {

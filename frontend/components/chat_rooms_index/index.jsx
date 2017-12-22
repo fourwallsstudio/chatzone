@@ -39,10 +39,26 @@ class ChatRoomIndex extends React.Component {
     this.props.joinChat(data);
   }
 
+  renderChatrooms = () => {
+    const chatrooms = [];
+    
+    this.props.chatrooms.forEach((cr, id) => {
+      chatrooms.push(
+        <ChatRoomButton 
+          key={cr.get('title')} 
+          onClick={this.handleClick} 
+          value={cr.get('title')}>
+          {cr.get('title')}
+        </ChatRoomButton>
+      )
+    })
+    
+    return chatrooms;
+  }
+
   render() {
-    const chatrooms = this.props.chatrooms.map( cr => ( 
-       <ChatRoomButton key={cr.title} onClick={this.handleClick} value={cr.title}>{cr.title}</ChatRoomButton>
-    ));
+    const chatrooms = this.renderChatrooms();
+    
     return !!this.props.currentUser ? (
       <Container>
         { chatrooms }

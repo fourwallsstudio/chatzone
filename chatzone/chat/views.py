@@ -1,4 +1,4 @@
-from flask import json
+from flask import json, request
 from flask_socketio import emit, join_room, leave_room
 from chatzone import socketio, redisCache
 
@@ -19,7 +19,8 @@ def on_join(data):
     if username not in members:
         redisCache.rpush(room, username)
 
-    print('joined: ', redisCache.lrange(room, 0, -1))
+    sid = request.sid
+    redisCache.hmset(sid, { 'username': username, 'chatroom': room })
     emit('joined_chat', msg_data, room=room)
 
 
@@ -37,9 +38,27 @@ def on_leave(data):
     }
 
     redisCache.lrem(room, 0,  username)
-    print('left: ', room, redisCache.lrange(room, 0, -1))
+    
+    sid = request.sid
+    redisCache.hmset(sid, { 'username': username, 'chatroom': '' })
+
     emit('left_chat', msg_data, room=room) 
 
 
+@socketio.on('disconnect')
+def disconnect():
+    username, chatroom = redisCache.hmget(request.sid, 'username', 'chatroom')
+    redisCache.delete(request.sid)
+    
+    if chatroom:
+        redisCache.lrem(chatroom, 0, username)
+
+        msg_data = {
+            'username': username.decode('utf-8'),
+            'chatroom': chatroom.decode('utf-8')
+        }
+        
+        emit('left_chat', msg_data, room=chatroom.decode('utf-8')) 
+        
 
 

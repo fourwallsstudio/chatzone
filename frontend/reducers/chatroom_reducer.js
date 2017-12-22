@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 
 export const FETCH_CHATROOMS_REQUEST = 'CHATROOM::FETCH_CHATROOMS_REQUEST';
 export const FETCH_CHATROOMS_SUCCESS = 'CHATROOM::FETCH_CHATROOMS_SUCCESS';
@@ -18,7 +18,7 @@ export const leaveChat = leaveData => ({ type: LEAVE_CHAT, leaveData });
 export const fetchMembers = chatroom => ({ type: FETCH_MEMBERS_REQUEST, chatroom });
 
 const defaultState = new Map({
-  chatrooms: new List(),
+  chatrooms: new Map(),
   currentChat: null,
   members: new List(),
   error: '',
@@ -26,10 +26,14 @@ const defaultState = new Map({
 
 const chatroomReducer = (state = defaultState, { type, payload }) => {
   switch (type) {
-    case FETCH_CHATROOMS_SUCCESS:
+
+    case FETCH_CHATROOMS_SUCCESS: {
+      const chatrooms = {} 
+      payload.forEach(cr => chatrooms[cr.id] = cr )
       return state  
-        .set('chatrooms', new List(payload))
+        .set('chatrooms', fromJS(chatrooms))
         .set('error', '');
+    }
     
     case UPDATE_CURRENT_CHAT: {
       const members = payload ? state.get('members') : new List();
