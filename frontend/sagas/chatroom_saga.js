@@ -16,13 +16,13 @@ import {
   FETCH_MEMBERS_SUCCESS,
   FETCH_MEMBERS_ERROR,
 } from 'reducers/chatroom_reducer';
+import { RECEIVE_NEW_MESSAGE } from 'reducers/message_reducer';
 
 const fetchChatRooms = () => axios.get('/chatrooms');
 
 function* handleFetchChatRooms() {
   try {
     const res = yield call(fetchChatRooms);
-    console.log('members res: ', res.data);
     yield put({ type: FETCH_CHATROOMS_SUCCESS, payload: res.data });
   } catch (error) {
     yield put({ type: FETCH_CHATROOMS_ERROR, payload: error });
@@ -61,7 +61,7 @@ const joinChat = data => socket.emit('join', data);
 
 function* handleJoinChat(data) {
   yield call(joinChat, JSON.stringify(data));
-  yield put({ type: UPDATE_CURRENT_CHAT, payload: data.chatroom });
+  yield put({ type: UPDATE_CURRENT_CHAT, payload: data });
   yield put(push(`/${data.chatroom}`));  
 }
 
@@ -85,20 +85,28 @@ export function* connectionFlow() {
 function socketInitChannel() {
   return eventChannel( emitter => {
     
-    const joinHandler = data => {
+    const handleJoin = data => {
       emitter({ type: ADD_CHAT_MEMBER, payload: data.username })
     }
 
-    const leftHandler = data => {
+    const handleLeft = data => {
       emitter({ type: REMOVE_CHAT_MEMBER, payload: data.username })
+    }
+
+    const handleNewMessage = data => {
+      emitter({ type: RECEIVE_NEW_MESSAGE, payload: data })
     }
  
     socket.on('joined_chat', data => {
-      joinHandler(data);
+      handleJoin(data);
     });
      
     socket.on('left_chat', data => {
-      leftHandler(data);
+      handleLeft(data);
+    });
+
+    socket.on('new_message', data => {
+      handleNewMessage(data);
     });
 
     return () => {}

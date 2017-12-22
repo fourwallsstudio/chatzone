@@ -1,6 +1,7 @@
 from flask import json, request
 from flask_socketio import emit, join_room, leave_room
-from chatzone import socketio, redisCache
+from chatzone import socketio, redisCache, db
+from chatzone.models import ChatRoom
 
 @socketio.on('join')
 def on_join(data): 
@@ -9,18 +10,22 @@ def on_join(data):
     room = data['chatroom']
     
     join_room(room)
-    
-    msg_data = {
-        'username': username,
-        'chatroom': room
-    }
-   
+
     members = list(map((lambda x: x.decode('utf-8')), redisCache.lrange(room, 0, -1)))
     if username not in members:
         redisCache.rpush(room, username)
 
     sid = request.sid
     redisCache.hmset(sid, { 'username': username, 'chatroom': room })
+    
+    chatroom = ChatRoom.query.filter_by(title=room).first() 
+
+    msg_data = {
+        'chatroom': chatroom.title,
+        'id': chatroom.id,
+        'username': username
+    }
+
     emit('joined_chat', msg_data, room=room)
 
 

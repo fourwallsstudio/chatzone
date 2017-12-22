@@ -38,7 +38,7 @@ const chatroomReducer = (state = defaultState, { type, payload }) => {
     case UPDATE_CURRENT_CHAT: {
       const members = payload ? state.get('members') : new List();
       return state
-        .set('currentChat', payload)
+        .set('currentChat', new Map(payload))
         .set('members', members);
     }
 
@@ -46,7 +46,6 @@ const chatroomReducer = (state = defaultState, { type, payload }) => {
       const newMembers = state.get('members').includes(payload) 
         ? state.get('members')
         : state.get('members').push(payload);
-      console.log('add members', state.get('members').includes(payload))
       return state
         .set('members', newMembers);
     }

@@ -32,9 +32,12 @@ class ChatRoomIndex extends React.Component {
   }
 
   handleClick = e => {
+    const room = e.target.value;
+    const chatroom = this.props.chatrooms.filter((cr, i) => cr.get('title') === room).first();
     const data =  {
       username: this.props.currentUser.get('username'),
-      chatroom: e.target.value,
+      chatroom: room,
+      id: chatroom.get('id')
     };
     this.props.joinChat(data);
   }

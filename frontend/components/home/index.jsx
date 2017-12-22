@@ -30,6 +30,9 @@ const LogoutButton = styled.button`
   color: ghostwhite;
   border: solid 1px ghostwhite;
   padding: 6px 10px;
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
 `
 
 class Home extends React.Component {
@@ -41,7 +44,7 @@ class Home extends React.Component {
   handleLogout = () => {
     const { currentChat, currentUser, logout, leaveChat } = this.props;
     
-    if (currentChat) leaveChat({ username: currentUser.get('username'), chatroom: currentChat });
+    if (currentChat) leaveChat({ username: currentUser.get('username'), chatroom: currentChat.get('title') });
     const id = currentUser.get('id');
     logout(id);
   }

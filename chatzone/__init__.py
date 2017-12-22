@@ -45,6 +45,7 @@ def drop_db():
 
 import chatzone.views
 import chatzone.chat.views
+import chatzone.message.views
 
 from chatzone.auth.views import auth_blueprint
 app.register_blueprint(auth_blueprint)

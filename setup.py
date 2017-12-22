@@ -9,6 +9,7 @@ setup(
     entry_points="""
         [flask.commands]
         create_db=mypackage.commands:create_db_command
+        drop_db=mypackage.commands:drop_db_command
     """,
     install_requires=[
         'flask',

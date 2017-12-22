@@ -34,6 +34,9 @@ const FormField = styled.div`
 const Button = styled.button`
   border: solid 1px ghostwhite;
   padding: 0 10px;
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
 `
 const TextButton = styled.button`
   position: absolute;

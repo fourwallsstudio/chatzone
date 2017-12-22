@@ -25,7 +25,6 @@ const Title = styled.h1`
 
 const MembersAside = ({ members, currentUser, chatroom }) => {
   const membersWithoutCurrentUser = members.filter( m => m !== currentUser.username );
-  console.log('members aside:', membersWithoutCurrentUser);
   const memberEls = membersWithoutCurrentUser.map((m, i) => <Member key={`${i} ${m}`}>{m}</Member> );
 
   return (

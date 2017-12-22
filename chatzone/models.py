@@ -12,6 +12,7 @@ class User(db.Model):
     password_digest = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
+    messages = db.relationship('Message', backref='user', lazy=True)
 
     def __init__(self, username, password):
         self.username = username
@@ -76,6 +77,7 @@ class ChatRoom(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255), unique=True, nullable=False)
     created_on = db.Column(db.DateTime, nullable=False)
+    messages = db.relationship('Message', backref='chat_room', lazy=True)
 
     def __init__(self, title):
         self.title = title
@@ -84,4 +86,23 @@ class ChatRoom(db.Model):
     def __repr__(self):
         return '<id: title: {}'.format(self.title)
 
+
+class Message(db.Model):
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    body = db.Column(db.Text, nullable=False)
+    author = db.Column(db.String(255))
+    chatroom = db.Column(db.String(255))
+    created_on = db.Column(db.DateTime, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    chatroom_id = db.Column(db.Integer, db.ForeignKey('chat_rooms.id'), nullable=False)
+    
+    def __init__(self, body, author, chatroom, user_id, chatroom_id):
+        self.body = body
+        self.author = author
+        self.chatroom = chatroom
+        self.user_id = user_id
+        self.chatroom_id = chatroom_id
+        self.created_on = datetime.datetime.now()
 
