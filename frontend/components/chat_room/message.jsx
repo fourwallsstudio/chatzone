@@ -10,25 +10,30 @@ const Container = styled.div`
   box-sizing: border-box;
 `
 const BG = styled.div`
-  display: flex;
   background: ${ p => p.right ? 'black' : 'lightgrey' };
   color: ${ p => p.right ? 'ghostwhite' : 'black' };
-  max-width: 50%;
-  padding: 0 10px;
+  /*max-width: ${ p => p.right ? '50%' : '70%' };*/
+  max-width: 60%;
+  padding: 4px 10px;
 `
 
 const P = styled.p`
   font-size: 16px;
   line-height: 20px;
   word-wrap: break-word;
-  max-width: 100%;
+  max-width: 100%; /*${ p => p.right ? '100%' : '50%' };*/
  ${ p => p.f ? 'margin-right: 10px;' : '' }
 `
 
 const Message = props => (
   <Container right={ props.right } >
     <BG right={ props.right } >
-      { !props.right && <P f={ true } >{ `${ props.msg.author }:` }</P> }
+      { 
+        !props.right && 
+        <P f={ true } 
+          right={ props.right }>
+          { `${ props.msg.author }:` }</P> 
+      }
       <P>{ props.msg.body }</P>
     </BG>
   </Container>

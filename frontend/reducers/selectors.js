@@ -14,9 +14,15 @@ export const messagesSelector = state => state.getIn(['messages', 'entities']);
 
 const getMessages = state => state.getIn(['messages', 'entities']);
 
+const getMsgIds = state => state.getIn(['messages', 'ids']);
+
 export const messageSelector = createSelector(
   getMessages,
+  getMsgIds,
   currentChatSelector,
-  (msgs, chat) => msgs.filter( m => m.get('chatroom') === chat.get('chatroom'))
+  (msgs, ids, chat) => (
+    ids.map( id => msgs.get(id))
+      .filter( m => m.get('chatroom') === chat.get('chatroom'))
+  )
 );
   

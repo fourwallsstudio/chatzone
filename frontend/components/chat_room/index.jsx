@@ -83,6 +83,7 @@ class ChatRoom extends React.Component {
     const validChat = !!currentUser && !currentChat.isEmpty();
     const membersJS = members.toJS(); 
     
+    console.log('messages', messages);
     return validChat ? (
       <Container>
         <Aside>
