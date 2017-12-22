@@ -1,4 +1,5 @@
 import React from 'react';
+import { reset } from 'redux-form';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { 
@@ -67,7 +68,7 @@ class ChatRoom extends React.Component {
   }
 
   handleSubmit = values => {
-    const { currentUser, currentChat, createMessage } = this.props;
+    const { currentUser, currentChat, createMessage, reset } = this.props;
     const msg = {
       body: values.get('message'),
       author: currentUser.get('username'),
@@ -76,6 +77,7 @@ class ChatRoom extends React.Component {
       chatroomId: currentChat.get('id'),
     }
     createMessage(msg); 
+    reset('message'); // clear form input field
   }
 
   render() {
@@ -83,7 +85,6 @@ class ChatRoom extends React.Component {
     const validChat = !!currentUser && !currentChat.isEmpty();
     const membersJS = members.toJS(); 
     
-    console.log('messages', messages);
     return validChat ? (
       <Container>
         <Aside>
@@ -113,6 +114,7 @@ const mapDispatchToProps = dispatch => ({
   leaveChat: data => dispatch(leaveChat(data)),
   fetchMembers: cr => dispatch(fetchMembers(cr)),
   createMessage: msg => dispatch(createMessage(msg)),
+  reset: form => dispatch(reset(form)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

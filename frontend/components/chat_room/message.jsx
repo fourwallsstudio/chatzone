@@ -12,7 +12,6 @@ const Container = styled.div`
 const BG = styled.div`
   background: ${ p => p.right ? 'black' : 'lightgrey' };
   color: ${ p => p.right ? 'ghostwhite' : 'black' };
-  /*max-width: ${ p => p.right ? '50%' : '70%' };*/
   max-width: 60%;
   padding: 4px 10px;
 `
@@ -21,7 +20,7 @@ const P = styled.p`
   font-size: 16px;
   line-height: 20px;
   word-wrap: break-word;
-  max-width: 100%; /*${ p => p.right ? '100%' : '50%' };*/
+  max-width: 100%; 
  ${ p => p.f ? 'margin-right: 10px;' : '' }
 `
 

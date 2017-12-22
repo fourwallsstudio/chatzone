@@ -7,12 +7,12 @@ import chatroomReducer from 'reducers/chatroom_reducer';
 import messageReducer from 'reducers/message_reducer';
 
 const rootReducer = combineReducers({
-  form: formReducer,
   session: sessionReducer,
   ui: uiReducer,
   chatroom: chatroomReducer,
   routing: routerReducer,
   messages: messageReducer,
+  form: formReducer,
 });
 
 export default rootReducer;
