@@ -84,11 +84,11 @@ function socketInitChannel() {
   return eventChannel( emitter => {
     
     const joinHandler = data => {
-      emitter({ type: ADD_CHAT_MEMBER, payload: data })
+      emitter({ type: ADD_CHAT_MEMBER, payload: data.username })
     }
 
     const leftHandler = data => {
-      emitter({ type: REMOVE_CHAT_MEMBER, payload: data })
+      emitter({ type: REMOVE_CHAT_MEMBER, payload: data.username })
     }
  
     socket.on('joined_chat', data => {

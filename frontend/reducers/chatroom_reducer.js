@@ -39,14 +39,16 @@ const chatroomReducer = (state = defaultState, { type, payload }) => {
     }
 
     case ADD_CHAT_MEMBER: {
-      const newMembers = state.get('members').push(payload.username);
+      const newMembers = state.get('members').includes(payload) 
+        ? state.get('members')
+        : state.get('members').push(payload);
+      console.log('add members', state.get('members').includes(payload))
       return state
         .set('members', newMembers);
     }
         
     case REMOVE_CHAT_MEMBER: {
-      const newMembers = state.get('members').filter( m => m !== payload.username );
-      console.log('REMOVE_CHAT', newMembers, 'payload', payload);
+      const newMembers = state.get('members').filter( m => m !== payload);
       return state
         .set('members', newMembers);
     }
