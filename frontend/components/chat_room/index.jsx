@@ -9,7 +9,10 @@ import {
   messageSelector,
 } from 'reducers/selectors';
 import { leaveChat, fetchMembers } from 'reducers/chatroom_reducer';
-import { createMessage } from 'reducers/message_reducer';
+import { 
+  createMessage,
+  fetchMessages,
+} from 'reducers/message_reducer';
 
 import MembersAside from './members_aside';
 import ChatDisplay from './chat_display';
@@ -30,6 +33,7 @@ const Aside = styled.div`
   width: 20%;
 `
 const ChatBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -38,6 +42,17 @@ const ChatBox = styled.div`
   width: 80%;
   margin-left: 10px;
   box-sizing: border-box;
+`
+
+const Button = styled.button`
+  position: absolute;
+  top: 0;
+  background: pink;
+  height: 24px;    
+  width: 100%;
+  text-align: center;
+  color: ghostwhite;
+  margin-bottom: 10px;
 `
 
 const BackButton = styled.button`
@@ -52,10 +67,27 @@ const BackButton = styled.button`
   }
 `
 
+const MessagesEnd = styled.div`
+  float: left;
+  clear: both;
+`
+
 class ChatRoom extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { scroll: false }
+  }
 
   componentDidMount() {
     this.props.fetchMembers(this.props.currentChat.get('chatroom'))
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!this.props.messages.equals(prevProps.messages)
+      && this.state.scroll ) {
+        this.scrollToBottom();
+    }
   }
 
   handleBack = () => {
@@ -78,6 +110,20 @@ class ChatRoom extends React.Component {
     }
     createMessage(msg); 
     reset('message'); // clear form input field
+    
+    // activate for scroll down when component is updated with new msg
+    this.setState({ scroll: true });
+  }
+
+  handleFetchMsgs = () => {
+    const page = Math.floor(this.props.messages.size / 20) + 1;
+    const chatroom = this.props.currentChat.get('chatroom');
+    this.props.fetchMessages(chatroom, page);
+  }
+
+  scrollToBottom = () => {
+    this.msgEnd.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    this.setState({ scroll: false });
   }
 
   render() {
@@ -95,7 +141,15 @@ class ChatRoom extends React.Component {
             chatroom={currentChat.get('chatroom')} /> 
         </Aside>
         <ChatBox>
-          <ChatDisplay currentUser={ currentUser } messages={ messages } />
+          <Button onClick={ this.handleFetchMsgs } >
+            load previous message
+          </Button>
+          <ChatDisplay 
+            currentUser={ currentUser } 
+            messages={ messages }
+            handleFetchMsgs={ this.handleFetchMsgs }>
+            <div ref={ el => this.msgEnd = el } style={{ float: 'left', clear: 'both' }}></div>
+          </ChatDisplay>
           <MessageForm onSubmit={ this.handleSubmit } />
         </ChatBox>
       </Container>
@@ -115,6 +169,7 @@ const mapDispatchToProps = dispatch => ({
   fetchMembers: cr => dispatch(fetchMembers(cr)),
   createMessage: msg => dispatch(createMessage(msg)),
   reset: form => dispatch(reset(form)),
+  fetchMessages: (cr, pg) => dispatch(fetchMessages(cr, pg)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatRoom);

@@ -6,7 +6,10 @@ import {
   connectionFlow,
   socketSagas, 
 } from 'sagas/chatroom_saga';
-import { waitingCreateMessage } from 'sagas/message_saga';
+import { 
+  waitingCreateMessage, 
+  waitingFetchMessages,
+ } from 'sagas/message_saga';
 
 export default function* rootSaga() {
   yield all([
@@ -18,5 +21,6 @@ export default function* rootSaga() {
     connectionFlow(),
     socketSagas(),
     waitingCreateMessage(),
+    waitingFetchMessages(),
   ]);
 };

@@ -3,11 +3,25 @@ from flask import make_response, request, jsonify
 from chatzone.models import Message, ChatRoom
 
 
-@app.route('/messages/<chatroom>')
-def messages(chatroom):
+@app.route('/messages/<chatroom>/<int:page>')
+def messages(chatroom, page):
     chatroom = ChatRoom.query.filter_by(title=chatroom).first()
     if chatroom:
-        return make_response(jsonify(chatroom.messages)), 200 
+        messages = []
+        pg = 1 if not page else page
+        end = len(chatroom.messages) - (pg -1) * 20
+        st = end - 20
+        print('page', st)
+        
+        for m in chatroom.messages[st:end]:
+            messages.append({
+                'id': m.id,
+                'body': m.body,
+                'author': m.author,
+                'chatroom': m.chatroom,
+            })
+
+        return make_response(jsonify(messages)), 200 
     else:
         return make_response('not a valid chatroom'), 422 
 

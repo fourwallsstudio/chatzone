@@ -21,7 +21,7 @@ export const messageSelector = createSelector(
   getMsgIds,
   currentChatSelector,
   (msgs, ids, chat) => (
-    ids.map( id => msgs.get(id))
+    ids.map( id => msgs.get(id.toString()))
       .filter( m => m.get('chatroom') === chat.get('chatroom'))
   )
 );

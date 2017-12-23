@@ -6,9 +6,10 @@ const Container = styled.div`
   border: solid 1px ghostwhite;
   height: 100%;
   max-width: 100%;
-  padding-top: 10px;
   overflow-y: scroll;
+  padding-top: 24px;
 `
+
 const renderMessages = props => {
   const messages = [];
 
@@ -30,6 +31,7 @@ const ChatDisplay = props => {
   return (
     <Container>
       { renderMessages(props) }      
+      { props.children }
     </Container>
   )
 }
