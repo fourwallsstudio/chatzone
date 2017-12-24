@@ -78,7 +78,7 @@ class LoginAPI(MethodView):
                 return make_response(jsonify(responseObject)), 404
         except Exception as e:
             print(e)
-            repsonseObject = {
+            responseObject = {
                 'status': 'fail',
                 'message': 'Try again'
             }
