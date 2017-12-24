@@ -23,7 +23,7 @@ class User(db.Model):
     def encode_auth_token(self, user_id):
         try:
             payload = {
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, minutes=15),
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, hours=1), # todo: exp should't be more than 15mins. Setup automatic token refresh
                     'iat': datetime.datetime.utcnow(),
                     'sub': user_id
             }
