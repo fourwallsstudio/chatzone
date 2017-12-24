@@ -1,6 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Message from './message';
+
+import style from './index.scss';
+
+const Fade = ({ children, ...props }) => (
+  <CSSTransition
+    {...props}
+    timeout={100}
+    classNames="fade"
+  >
+  { children }
+  </CSSTransition>
+)
 
 const Container = styled.div`
   border: solid 1px ghostwhite;
@@ -16,11 +29,12 @@ const renderMessages = props => {
   props.messages.forEach( (msg, i) => {
     const right = msg.get('author') === props.currentUser.get('username');
     messages.push(
-      <Message 
-        key={ `${i}: ${msg.get('id')}` }
-        right={ right } 
-        msg={ msg.toJS() }
-        />
+      <Fade key={ `${i}: ${msg.get('id')}` }>
+        <Message 
+          right={ right } 
+          msg={ msg.toJS() }
+          />
+      </Fade>
     )
   })
 
@@ -29,8 +43,10 @@ const renderMessages = props => {
 
 const ChatDisplay = props => {
   return (
-    <Container>
-      { renderMessages(props) }      
+    <Container innerRef={ props.setRef }>
+      <TransitionGroup className='messages'>
+        { renderMessages(props) }      
+      </TransitionGroup>
       { props.children }
     </Container>
   )

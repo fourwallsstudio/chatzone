@@ -1,6 +1,7 @@
 import React from 'react';
 import { reset } from 'redux-form';
 import styled from 'styled-components';
+import Observer from 'react-intersection-observer';
 import { connect } from 'react-redux';
 import { 
   currentChatSelector, 
@@ -72,15 +73,47 @@ const MessagesEnd = styled.div`
   clear: both;
 `
 
+const NotesContainer = styled.div`
+  display: flex;
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  width: 100%;
+  overflow: hiddin;
+`
+const Note = styled.div`
+  background: pink;
+  border-radis: 100%;
+  width: 10px;
+  height: 10px;
+  filter: blur(4px);
+  margin-right: 4px;
+`
+
 class ChatRoom extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { scroll: false }
+    this.state = { 
+      scroll: false,
+      notifications: [],
+      inView: true,
+    }
   }
 
   componentDidMount() {
     this.props.fetchMembers(this.props.currentChat.get('chatroom'))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.messages.size > this.props.messages.size
+        && this.msgEnd.offsetTop >= this.msgDisplay.clientHeight
+        && !this.state.scroll) {
+      
+      const newNotes = Object.assign([], this.state.notifications);
+      newNotes.push('n')
+      this.setState({ notifications: newNotes });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -126,10 +159,25 @@ class ChatRoom extends React.Component {
     this.setState({ scroll: false });
   }
 
+  handleClearNotifications = (inView) => {
+    if (inView) {
+      this.setState({ notifications: [], inView: true }); 
+    } else {
+      this.setState({ inView: false });
+    }
+  }
+
+  setRef = (element) => {
+    this.msgDisplay = element;
+  }
+
   render() {
     const { currentUser, currentChat, members, messages } = this.props;
     const validChat = !!currentUser && !currentChat.isEmpty();
     const membersJS = members.toJS(); 
+    const notes = this.state.notifications.map( (n, i) => <Note key={i} />);
+    console.log('inView', this.state.inView)
+    console.log('notes: ', this.state.notifications)
     
     return validChat ? (
       <Container>
@@ -142,14 +190,18 @@ class ChatRoom extends React.Component {
         </Aside>
         <ChatBox>
           <Button onClick={ this.handleFetchMsgs } >
-            load previous message
+            load previous messages
           </Button>
           <ChatDisplay 
             currentUser={ currentUser } 
             messages={ messages }
+            setRef={ this.setRef }
             handleFetchMsgs={ this.handleFetchMsgs }>
-            <div ref={ el => this.msgEnd = el } style={{ float: 'left', clear: 'both' }}></div>
+            <Observer onChange={ inView => this.handleClearNotifications(inView) }>
+              <div ref={ el => this.msgEnd = el } style={{ float: 'left', clear: 'both' }}></div>
+            </Observer>
           </ChatDisplay>
+          <NotesContainer>{ notes }</NotesContainer>
           <MessageForm onSubmit={ this.handleSubmit } />
         </ChatBox>
       </Container>
