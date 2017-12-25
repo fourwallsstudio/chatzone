@@ -50,8 +50,11 @@ class Home extends React.Component {
   }
 
   render() {
-    const { currentUser, currentChat } = this.props;
+    const { currentUser, currentChat, path } = this.props;
+    const pathAtIndex = path === '/';
+    const chatPath = currentChat && `/${currentChat.get('chatroom')}`; 
     
+    console.log('chatIndex', chatPath, path);
     return !!currentUser ? (
       <Container>
         <Header>
@@ -59,8 +62,8 @@ class Home extends React.Component {
           <LogoutButton onClick={ this.handleLogout }>logout</LogoutButton>
         </Header>
         <Title />
-        <Route exact path='/' component={ ChatRoomIndex } />
-        { currentChat && <ChatRoom /> }
+        { pathAtIndex && <ChatRoomIndex /> }
+        { chatPath === path && <ChatRoom /> }
       </Container>
     ) : null;
   }
@@ -70,6 +73,7 @@ const mapStateToProps = state => ({
   currentUser: currentUserSelector(state),
   authToken: getAuthTokenFromLocalStorage(),
   currentChat: currentChatSelector(state),
+  path: state.get('routing').location.pathname,
 });
 
 const mapDispatchToProps = dispatch => ({

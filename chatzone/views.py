@@ -1,11 +1,19 @@
 from chatzone import app, static_file_dir, db, redisCache
-from flask import jsonify, send_from_directory, make_response
+from flask import jsonify, send_from_directory, make_response, redirect
 from chatzone.models import ChatRoom
 from chatzone.login_manager import login_required
 
 @app.route('/')
 def index():
     return send_from_directory(static_file_dir, 'index.html')  
+
+@app.route('/<chatroom>')
+def redirect_to_index(chatroom):
+    validChat = ChatRoom.query.filter_by(title=chatroom).first()
+    if validChat:
+        return redirect('/', code=302)
+    else:
+        return send_from_directory(static_file_dir, '404.html')
 
 @app.route('/chatrooms')
 @login_required
