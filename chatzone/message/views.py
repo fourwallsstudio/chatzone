@@ -1,9 +1,11 @@
 from chatzone import app, db, socketio
 from flask import make_response, request, jsonify
 from chatzone.models import Message, ChatRoom
+from chatzone.login_manager import login_required 
 
 
 @app.route('/messages/<chatroom>/<int:page>')
+@login_required
 def messages(chatroom, page):
     chatroom = ChatRoom.query.filter_by(title=chatroom).first()
     if chatroom:
@@ -27,6 +29,7 @@ def messages(chatroom, page):
 
 
 @app.route('/messages', methods=['POST'])
+@login_required
 def create_message():
     post_data = request.form if request.form else request.get_json()
     print('messages post_data', post_data)

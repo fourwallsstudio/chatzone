@@ -1,7 +1,7 @@
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
-from chatzone import bcrypt, db
+from chatzone import bcrypt, db, login_manager
 from chatzone.models import User, BlacklistToken
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -87,40 +87,9 @@ class LoginAPI(MethodView):
 
 class CurrentUserAPI(MethodView):
     def get(self):
-        auth_header = request.headers.get('Authorization')
-        if auth_header:
-            try:
-                auth_token = auth_header.split(" ")[1]
-            except IndexError:
-                responseObject = {
-                    'status': 'fail',
-                    'message': 'Bearer token malformed.'
-                }
-                return make_response(jsonify(responseObject)), 401
-        else:
-            auth_token = ''
-        if auth_token:
-            resp = User.decode_auth_token(auth_token)
-            if not isinstance(resp, str):
-                user = User.query.filter_by(id=resp).first()
-                responseObject = {
-                    'status': 'success',
-                    'id': user.id,
-                    'username': user.username
-                }
-                return make_response(jsonify(responseObject)), 200
-            responseObject = {
-                'status': 'fail',
-                'message': resp
-            }
-            return make_response(jsonify(responseObject)), 401
-        else:
-            responseObject = {
-                'status': 'fail',
-                'message': 'Provide a valid auth token.'
-            }
-            return make_response(jsonify(responseObject)), 401
-
+        responseObject = login_manager._load_user()
+        return make_response(jsonify(responseObject)), responseObject['status_code']
+        
 class LogoutAPI(MethodView):
     def post(self):
         auth_header = request.headers.get('Authorization')

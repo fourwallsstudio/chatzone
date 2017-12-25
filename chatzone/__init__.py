@@ -32,8 +32,11 @@ bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-import chatzone.models
+from chatzone.login_manager import LoginManager
+login_manager = LoginManager()
+login_manager.init_app(app)
 
+import chatzone.models
 
 def create_db():
     db.create_all()

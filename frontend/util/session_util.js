@@ -9,3 +9,6 @@ export const getAuthTokenFromLocalStorage = () => {
 export const removeAuthTokenFromLocalStorage = () => {
   window.localStorage.removeItem('authToken');
 }
+
+export const authHeader = () => `Bearer ${getAuthTokenFromLocalStorage()}`;
+
