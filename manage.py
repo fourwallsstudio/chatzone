@@ -1,8 +1,10 @@
 from flask_script import Manager, Server as _Server
-from chatzone import app, socketio
+from flask_migrate import Migrate, MigrateCommand
+from chatzone import app, db, socketio, create_db
 import eventlet
 eventlet.monkey_patch()
 
+migrate = Migrate(app, db)
 manager = Manager(app)
 
 
@@ -12,6 +14,7 @@ class Server(_Server):
         
 
 manager.add_command("runserver", Server())
+manager.add_command("db", MigrateCommnad)
 
 if __name__ == "__main__":
     manager.run()
