@@ -1,11 +1,11 @@
-from flask_script import Manager, Server
+from flask_script import Manager, Server as _Server
 from chatzone import app, socketio
 
 manager = Manager(app)
 
 
 class Server(_Server):
-    def __call__(self):
+    def __call__(self, app):
         socketio.run(app)
         
 

@@ -55,5 +55,5 @@ import chatzone.message.views
 from chatzone.auth.views import auth_blueprint
 app.register_blueprint(auth_blueprint)
 
-if __name__ == '__main__':
-    socketio.run(app)
+# if __name__ == '__main__':
+#   socketio.run(app)
