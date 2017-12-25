@@ -10,8 +10,18 @@ import {
   FETCH_MESSAGES_SUCCESS,
   FETCH_MESSAGES_ERROR,
 } from 'reducers/message_reducer';
+import { authHeader } from '../util/session_util';
 
-const createMessage = msg => axios.post('/messages', msg);
+// const createMessage = msg => axios.post('/messages', msg);
+
+const createMessage = (msg) => {
+  return axios.request({
+    url: '/messages',
+    method: 'post',
+    data: msg,
+    headers: { 'Authorization': authHeader() },
+  })
+};
 
 function* handleCreateMessage(msg) {
   try {
@@ -28,7 +38,14 @@ export function* waitingCreateMessage() {
   }
 }
 
-const fetchMessages = (ch, pg) => axios.get(`/messages/${ch}/${pg}`);
+const fetchMessages = (ch, pg) => {
+  return axios.request({
+    url: `/messages/${ch}/${pg}`,
+    method: 'get',
+    headers: { 'Authorization': authHeader() },
+  })
+};
+
 
 function* handleFetchMessages(chatroom, page) {
   try {

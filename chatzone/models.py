@@ -19,7 +19,7 @@ class User(db.Model):
         self.password_digest = bcrypt.generate_password_hash(password).decode()
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
-
+        
     def encode_auth_token(self, user_id):
         try:
             payload = {

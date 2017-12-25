@@ -17,8 +17,15 @@ import {
   FETCH_MEMBERS_ERROR,
 } from 'reducers/chatroom_reducer';
 import { RECEIVE_NEW_MESSAGE } from 'reducers/message_reducer';
+import { authHeader } from '../util/session_util';
 
-const fetchChatRooms = () => axios.get('/chatrooms');
+const fetchChatRooms = () => {
+  return axios.request({
+    url: '/chatrooms',
+    method: 'get',
+    headers: { 'Authorization': authHeader() },
+  })
+};
 
 function* handleFetchChatRooms() {
   try {
@@ -36,14 +43,20 @@ export function* waitingFetchChatRooms() {
   }
 }
 
-const fetchMembers = chatroom => axios.get(`/members/${chatroom}`);
+const fetchMembers = (chatroom) => {
+  return axios.request({
+    url: `/members/${chatroom}`,
+    method: 'get',
+    headers: { 'Authorization': authHeader() },
+  })
+};
 
 function* handleFetchMembers(chatroom) {
   try {
     const res = yield call(fetchMembers, chatroom);
     yield put({ type: FETCH_MEMBERS_SUCCESS, payload: res.data });
   } catch(error) {
-    yield put({ type: FETCH_MEMBERS_ERRORS, payload: error });
+    yield put({ type: FETCH_MEMBERS_ERROR, payload: error });
   }
 }
 
@@ -54,7 +67,7 @@ export function* waitingFetchMembers() {
   }
 }
 
-const socket = io();
+const socket = io({ secure: true });
 
 
 const joinChat = data => socket.emit('join', data);

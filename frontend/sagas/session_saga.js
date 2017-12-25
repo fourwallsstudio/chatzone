@@ -19,9 +19,9 @@ import {
   setAuthTokenOnLocalStorage,
   getAuthTokenFromLocalStorage,
   removeAuthTokenFromLocalStorage,
+  authHeader,
 } from '../util/session_util';
 
-const authHeader = () => `Bearer ${getAuthTokenFromLocalStorage()}`;
 
 const login = formData => axios.post('/login', formData);
 
