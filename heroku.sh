@@ -1,5 +1,4 @@
 #!/bin/bash
 . venv/bin/activate
-pip install -r requirements.text
-python setup.py install
+pip install -r requirements.txt
 flask run
