@@ -1,5 +1,7 @@
 from flask_script import Manager, Server as _Server
 from chatzone import app, socketio
+import eventlet
+eventlet.monkey_patch()
 
 manager = Manager(app)
 
