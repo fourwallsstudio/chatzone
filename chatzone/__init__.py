@@ -9,8 +9,10 @@ from flask_cors import CORS
 from flask_socketio import SocketIO#, emit, join_room, leave_room
 from dotenv import load_dotenv
 
-# redis pub/sub
-redisCache = redis.StrictRedis(host='localhost', port=6379, db=0)
+# redis 
+redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
+redisCache = redis.StrictRedis(redis_url, db=0)
+# redisCache = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 # load dotenv in the base root
 APP_ROOT = os.path.join(os.path.dirname(__file__), '..')
