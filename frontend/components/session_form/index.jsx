@@ -57,7 +57,7 @@ const validate = (values) => {
 
 const renderInputField = ({ input, label, name, type, meta: { touched, error }}) => (
   <FormField>
-    <input {...input} placeholder={label} type={type} />
+    <input {...input} placeholder={label} type={type} autocomplete="off" />
     { touched && error && <span>{error}</span> }
   </FormField>
 )
