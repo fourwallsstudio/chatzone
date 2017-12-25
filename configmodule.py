@@ -1,6 +1,6 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-user = os.getenv('USER')
+user = os.getenv('USER' || '')
 postgres_local_base = 'postgresql://' + user + ':@localhost/'
 
 class Config(object):
@@ -10,7 +10,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'production_db' 
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL' || '')
 
 class DevelopmentConfig(Config):
     DEBUG = True

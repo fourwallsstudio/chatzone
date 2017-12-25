@@ -10,8 +10,8 @@ from flask_socketio import SocketIO#, emit, join_room, leave_room
 from dotenv import load_dotenv
 
 # redis 
-redis_url = os.getenv('REDISTOGO_URL', 'redis://localhost:6379')
-redisCache = redis.StrictRedis(redis_url, db=0)
+redis_url = os.getenv('REDISTOGO_URL', 'localhost')
+redisCache = redis.from_url(redis_url)
 # redisCache = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 # load dotenv in the base root
