@@ -1,3 +1,5 @@
 #!/bin/bash
-gevent app:app --daemon
-# python worker.py
+. venv/bin/activate
+pip install -r requirements.text
+python setup.py install
+flask run
