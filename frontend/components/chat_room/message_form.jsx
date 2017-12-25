@@ -41,7 +41,7 @@ const Button = styled.button`
 
 const renderInputField = ({ input, label, name, type }) => (
   <FormField>
-    <input {...input} placeholder={label} type={type} autocomplete="off" />
+    <input {...input} placeholder={label} type={type} autoComplete="off" />
   </FormField>
 )
 
