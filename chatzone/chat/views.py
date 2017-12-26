@@ -15,7 +15,7 @@ def on_join(data):
     if username not in members:
         redisCache.rpush(room, username)
 
-    sid = str(request.sid)
+    sid = request.sid
     redisCache.hmset(sid, { 'username': username, 'chatroom': room })
     
     chatroom = ChatRoom.query.filter_by(title=room).first() 
@@ -42,10 +42,11 @@ def on_leave(data):
         'username': username,
         'chatroom': room
     }
-    print('leave', data, request)
-    redisCache.lrem(room, 0,  username)
+    print('leave', data, request.sid)
+    # had wrong arg order: room, 0, username
+    redisCache.lrem(room, username, 0)
     
-    sid = str(request.sid)
+    sid = request.sid
     redisCache.hmset(sid, { 'username': username, 'chatroom': '' })
 
     print('sid', sid, 'msg_data', msg_data)
