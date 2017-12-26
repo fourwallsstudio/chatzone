@@ -32,10 +32,11 @@ def on_join(data):
 
 @socketio.on('leave')
 def on_leave(data):
-    if not data:
+    data = json.loads(data)
+    print('leave data', data)
+    if 'chatroom' not in data.keys():
         disconnect()
     else:
-        data = json.loads(data)
         username = data['username']
         room = data['chatroom']
         
@@ -45,7 +46,7 @@ def on_leave(data):
             'username': username,
             'chatroom': room
         }
-        print('leave', data, request.sid)
+
         redisCache.lrem(room, username, 0)
         
         sid = request.sid
@@ -60,6 +61,7 @@ def disconnect():
     username, chatroom = redisCache.hmget(request.sid, 'username', 'chatroom')
     redisCache.delete(request.sid)
     
+    print('disconnect', username, chatroom, request.sid)
     if chatroom:
         redisCache.lrem(chatroom, username, 0)
 
