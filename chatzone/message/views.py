@@ -32,7 +32,6 @@ def messages(chatroom, page):
 @login_required
 def create_message():
     post_data = request.form if request.form else request.get_json()
-    print('messages post_data', post_data)
     
     message = Message(
         body=post_data.get('body'),
@@ -53,7 +52,7 @@ def create_message():
         'chatroom': message.chatroom
     }
     
-    print('msg', msg)
+    print('new_msg', msg)
     socketio.emit('new_message', msg, room=chatroom.title)
 
     return make_response('success'), 201

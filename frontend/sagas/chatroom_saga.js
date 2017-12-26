@@ -99,14 +99,17 @@ function socketInitChannel() {
   return eventChannel( emitter => {
     
     const handleJoin = data => {
+      console.log('handle join', data.username)
       emitter({ type: ADD_CHAT_MEMBER, payload: data.username })
     }
 
     const handleLeft = data => {
+      console.log('handle left', data.username)
       emitter({ type: REMOVE_CHAT_MEMBER, payload: data.username })
     }
 
     const handleNewMessage = data => {
+      console.log('handle new msg', data)
       emitter({ type: RECEIVE_NEW_MESSAGE, payload: data })
     }
  
