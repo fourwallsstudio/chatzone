@@ -42,7 +42,7 @@ def on_leave(data):
         'username': username,
         'chatroom': room
     }
-    print('leave', data, response)
+    print('leave', data, request)
     redisCache.lrem(room, 0,  username)
     
     sid = str(request.sid)
