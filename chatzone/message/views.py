@@ -53,6 +53,7 @@ def create_message():
     }
     
     print('new_msg', msg)
+    print('sid', request.sid)
     socketio.emit('new_message', msg, room=chatroom.title)
 
     return make_response('success'), 201
