@@ -114,14 +114,17 @@ function socketInitChannel() {
     }
  
     socket.on('joined_chat', data => {
+      console.log('join chat emit received')
       handleJoin(data);
     });
      
     socket.on('left_chat', data => {
+      console.log('left chat received')
       handleLeft(data);
     });
 
     socket.on('new_message', data => {
+      console.log('new messsage received') 
       handleNewMessage(data);
     });
 
