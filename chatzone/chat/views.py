@@ -32,25 +32,27 @@ def on_join(data):
 
 @socketio.on('leave')
 def on_leave(data):
-    data = json.loads(data)
-    username = data['username']
-    room = data['chatroom']
-    
-    leave_room(room)
-    
-    msg_data = {
-        'username': username,
-        'chatroom': room
-    }
-    print('leave', data, request.sid)
-    # had wrong arg order: room, 0, username
-    redisCache.lrem(room, username, 0)
-    
-    sid = request.sid
-    redisCache.hmset(sid, { 'username': username, 'chatroom': '' })
+    if not data:
+        disconnect()
+    else:
+        data = json.loads(data)
+        username = data['username']
+        room = data['chatroom']
+        
+        leave_room(room)
+        
+        msg_data = {
+            'username': username,
+            'chatroom': room
+        }
+        print('leave', data, request.sid)
+        redisCache.lrem(room, username, 0)
+        
+        sid = request.sid
+        redisCache.hmset(sid, { 'username': username, 'chatroom': '' })
 
-    print('sid', sid, 'msg_data', msg_data)
-    emit('left_chat', msg_data, room=room) 
+        print('sid', sid, 'msg_data', msg_data)
+        emit('left_chat', msg_data, room=room) 
 
 
 @socketio.on('disconnect')
@@ -59,7 +61,7 @@ def disconnect():
     redisCache.delete(request.sid)
     
     if chatroom:
-        redisCache.lrem(chatroom, 0, username)
+        redisCache.lrem(chatroom, username, 0)
 
         msg_data = {
             'username': username.decode('utf-8'),
