@@ -61,7 +61,7 @@ def disconnect():
     username, chatroom = redisCache.hmget(request.sid, 'username', 'chatroom')
     redisCache.delete(request.sid)
     
-    print('disconnect', username, chatroom, request.sid)
+    print('disconnect', request.sid)
     if chatroom:
         redisCache.lrem(chatroom, username, 0)
 
@@ -70,6 +70,7 @@ def disconnect():
             'chatroom': chatroom.decode('utf-8')
         }
         
+        print('disconnect left_chat', username, chatroom)
         emit('left_chat', msg_data, room=chatroom.decode('utf-8')) 
         
 
