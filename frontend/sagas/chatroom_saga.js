@@ -67,7 +67,7 @@ export function* waitingFetchMembers() {
   }
 }
 
-const socket = io({ secure: true });
+const socket = io('http://chatzoneapp.herokuapp.com');
 
 
 const joinChat = data => socket.emit('join', data);
