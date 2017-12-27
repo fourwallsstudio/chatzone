@@ -27,7 +27,6 @@ function* handleCreateMessage(msg) {
   try {
     const res = yield call(createMessage, msg);
     // new messages are broadcasted through socketio after created
-    console.log('creat msg res: ', res)
   } catch (error) {
   }
 }

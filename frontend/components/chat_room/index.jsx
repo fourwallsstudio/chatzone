@@ -176,8 +176,6 @@ class ChatRoom extends React.Component {
     const validChat = !!currentUser && !currentChat.isEmpty();
     const membersJS = members.toJS(); 
     const notes = this.state.notifications.map( (n, i) => <Note key={i} />);
-    console.log('inView', this.state.inView)
-    console.log('notes: ', this.state.notifications)
     
     return validChat ? (
       <Container>

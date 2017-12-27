@@ -54,7 +54,6 @@ class Home extends React.Component {
     const pathAtIndex = path === '/';
     const chatPath = currentChat && `/${currentChat.get('chatroom')}`; 
     
-    console.log('chatIndex', chatPath, path);
     return !!currentUser ? (
       <Container>
         <Header>

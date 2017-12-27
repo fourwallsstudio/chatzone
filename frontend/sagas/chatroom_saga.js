@@ -98,32 +98,26 @@ function socketInitChannel() {
   return eventChannel( emitter => {
     
     const handleJoin = data => {
-      console.log('handle join', data.username)
       emitter({ type: ADD_CHAT_MEMBER, payload: data.username })
     }
 
     const handleLeft = data => {
-      console.log('handle left', data.username)
       emitter({ type: REMOVE_CHAT_MEMBER, payload: data.username })
     }
 
     const handleNewMessage = data => {
-      console.log('handle new msg', data)
       emitter({ type: RECEIVE_NEW_MESSAGE, payload: data })
     }
  
     socket.on('joined_chat', data => {
-      console.log('join chat emit received')
       handleJoin(data);
     });
      
     socket.on('left_chat', data => {
-      console.log('left chat received')
       handleLeft(data);
     });
 
     socket.on('new_message', data => {
-      console.log('new messsage received') 
       handleNewMessage(data);
     });
 
