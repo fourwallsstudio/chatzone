@@ -3,7 +3,7 @@ from flask_socketio import emit, join_room, leave_room
 from chatzone import socketio, redisCache, db
 from chatzone.models import ChatRoom
 
-@socketio.on('join', namespace='/chat')
+@socketio.on('join')
 def on_join(data): 
     data = json.loads(data)
     username = data['username']
@@ -30,7 +30,7 @@ def on_join(data):
     emit('joined_chat', msg_data, room=room)
 
 
-@socketio.on('leave', namespace='/chat')
+@socketio.on('leave')
 def on_leave(data):
     data = json.loads(data)
     print('leave data', data)
@@ -56,7 +56,7 @@ def on_leave(data):
         emit('left_chat', msg_data, room=room) 
 
 
-@socketio.on('disconnect', namespace='/chat')
+@socketio.on('disconnect')
 def disconnect():
     username, chatroom = redisCache.hmget(request.sid, 'username', 'chatroom')
     redisCache.delete(request.sid)
