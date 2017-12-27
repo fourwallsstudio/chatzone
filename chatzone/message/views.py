@@ -56,7 +56,7 @@ def create_message():
     
     print('new_msg', msg)
     print('socketio', socketio)
-    socketio.emit('new_message', msg, room=chatroom.title, callback=ack)
+    socketio.emit('new_message', msg, room=chatroom.title, callback=ack, namespace='/chat')
 
     return make_response('success'), 201
         
