@@ -50,7 +50,6 @@ class User(db.Model):
             return 'Invalid token. Please log in again.'
 
 
-# TODO: move this to Redis db
 class BlacklistToken(db.Model):
     __tablename__ = 'blacklist_tokens'
 

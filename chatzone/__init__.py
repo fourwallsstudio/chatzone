@@ -6,7 +6,7 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
-from flask_socketio import SocketIO#, emit, join_room, leave_room
+from flask_socketio import SocketIO
 from dotenv import load_dotenv
 
 # redis 
