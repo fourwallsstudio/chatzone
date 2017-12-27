@@ -1,8 +1,8 @@
 from flask_script import Manager, Server as _Server
 from flask_migrate import Migrate, MigrateCommand
 from chatzone import app, db, socketio
-import eventlet
-eventlet.monkey_patch()
+# import eventlet
+# eventlet.monkey_patch()
 
 migrate = Migrate(app, db)
 manager = Manager(app)

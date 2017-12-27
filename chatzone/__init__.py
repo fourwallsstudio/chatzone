@@ -25,7 +25,7 @@ print('static: ', static_file_dir)
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async='eventlet', engineio_logger=True)
 
 app.config.from_object(os.getenv('CHATZONE_SETTINGS'))
 app.config.from_envvar('CHATZONE_SETTINGS', silent=True)
