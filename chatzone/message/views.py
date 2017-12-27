@@ -27,8 +27,6 @@ def messages(chatroom, page):
     else:
         return make_response('not a valid chatroom'), 422 
 
-def ack():
-    print('new msg emmitted')
 
 @app.route('/messages', methods=['POST'])
 @login_required
@@ -56,7 +54,7 @@ def create_message():
     
     print('new_msg', msg)
     print('socketio', socketio)
-    socketio.emit('new_message', msg, room=chatroom.title, callback=ack, namespace='/chat')
+    socketio.emit('new_message', msg, room=chatroom.title)
 
     return make_response('success'), 201
         
