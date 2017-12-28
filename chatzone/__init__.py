@@ -2,6 +2,7 @@ import os
 import redis
 
 from flask import Flask, json, jsonify
+from flask_sslify import SSLify
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -25,14 +26,14 @@ print('static: ', static_file_dir)
 
 app = Flask(__name__)
 CORS(app)
+bcrypt = Bcrypt(app)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+sslify = SSLify(app)
 socketio = SocketIO(app, async='eventlet', engineio_logger=True)
 
 app.config.from_object(os.getenv('CHATZONE_SETTINGS'))
 app.config.from_envvar('CHATZONE_SETTINGS', silent=True)
-
-bcrypt = Bcrypt(app)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 from chatzone.login_manager import LoginManager
 login_manager = LoginManager()
