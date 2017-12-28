@@ -6,7 +6,7 @@ import Title from 'components/title';
 import ChatRoomIndex from '../chat_rooms_index';
 import ChatRoom from '../chat_room';
 import { logout, fetchCurrentUser } from 'reducers/session_reducer';
-import { leaveChat } from 'reducers/chatroom_reducer';
+import { connectToSocket, leaveChat } from 'reducers/chatroom_reducer';
 import { currentUserSelector, currentChatSelector } from 'reducers/selectors';
 import { getAuthTokenFromLocalStorage } from '../../util/session_util';
 
@@ -39,6 +39,12 @@ class Home extends React.Component {
 
   componentWillMount() {
     if (this.props.authToken) this.props.fetchCurrentUser();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.currentUser && nextProps.currentUser) {
+      this.props.connectToSocket();
+    }
   }
 
   handleLogout = () => {
@@ -78,6 +84,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   logout: id => dispatch(logout(id)),
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
+  connectToSocket: () => dispatch(connectToSocket()),
   leaveChat: data => dispatch(leaveChat(data)),
 });
 

@@ -7,6 +7,7 @@ import {
   FETCH_CHATROOMS_REQUEST,
   FETCH_CHATROOMS_SUCCESS,
   FETCH_CHATROOMS_ERROR,
+  CONNECT_TO_SOCKET,
   JOIN_CHAT,
   LEAVE_CHAT,
   UPDATE_CURRENT_CHAT,
@@ -67,36 +68,13 @@ export function* waitingFetchMembers() {
   }
 }
 
-const socket = io();
-
-const joinChat = data => socket.emit('join', data);
-
-function* handleJoinChat(data) {
-  yield call(joinChat, JSON.stringify(data));
-  yield put({ type: UPDATE_CURRENT_CHAT, payload: data });
-  yield put(push(`/${data.chatroom}`));  
-}
-
-const leaveChat = data => socket.emit('leave', data);
-
-function* handleLeaveChat(data) {
-  yield call(leaveChat, JSON.stringify(data));
-  yield put({ type: UPDATE_CURRENT_CHAT, payload: null });
-  yield put(push('/'));
-}
-
-export function* connectionFlow() {
-  while (true) {
-    const { joinData } = yield take(JOIN_CHAT);
-    yield fork(handleJoinChat, joinData);
-    const { leaveData } = yield take(LEAVE_CHAT);
-    yield call(handleLeaveChat, leaveData);
-  }
-};
+let socket;
 
 function socketInitChannel() {
+  socket = io();
+  
   return eventChannel( emitter => {
-    
+
     const handleJoin = data => {
       emitter({ type: ADD_CHAT_MEMBER, payload: data.username })
     }
@@ -126,9 +104,35 @@ function socketInitChannel() {
 }
 
 export function* socketSagas() {
+  yield take(CONNECT_TO_SOCKET)
   const channel = yield call(socketInitChannel)
   while (true) {
     const action = yield take(channel)
     yield put(action);
   }
 }
+
+const joinChat = data => socket.emit('join', data);
+
+function* handleJoinChat(data) {
+  yield call(joinChat, JSON.stringify(data));
+  yield put({ type: UPDATE_CURRENT_CHAT, payload: data });
+  yield put(push(`/${data.chatroom}`));  
+}
+
+const leaveChat = data => socket.emit('leave', data);
+
+function* handleLeaveChat(data) {
+  yield call(leaveChat, JSON.stringify(data));
+  yield put({ type: UPDATE_CURRENT_CHAT, payload: null });
+  yield put(push('/'));
+}
+
+export function* joinLeaveChatFlow() {
+  while (true) {
+    const { joinData } = yield take(JOIN_CHAT);
+    yield fork(handleJoinChat, joinData);
+    const { leaveData } = yield take(LEAVE_CHAT);
+    yield call(handleLeaveChat, leaveData);
+  }
+};

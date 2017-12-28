@@ -1,9 +1,14 @@
 import { all } from 'redux-saga/effects';
-import { loginFlow, signupFlow, currentUserFlow } from 'sagas/session_saga';  
+import { 
+  waitingLogin, 
+  waitingLogout,
+  waitingSignup, 
+  waitingCurrentUser 
+} from 'sagas/session_saga';  
 import { 
   waitingFetchChatRooms,
   waitingFetchMembers,
-  connectionFlow,
+  joinLeaveChatFlow,
   socketSagas, 
 } from 'sagas/chatroom_saga';
 import { 
@@ -13,12 +18,13 @@ import {
 
 export default function* rootSaga() {
   yield all([
-    loginFlow(),
-    signupFlow(),
-    currentUserFlow(),
+    waitingLogin(),
+    waitingLogout(),
+    waitingSignup(),
+    waitingCurrentUser(),
     waitingFetchChatRooms(),
     waitingFetchMembers(),
-    connectionFlow(),
+    joinLeaveChatFlow(),
     socketSagas(),
     waitingCreateMessage(),
     waitingFetchMessages(),

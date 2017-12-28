@@ -26,12 +26,14 @@ import {
 const login = formData => axios.post('/login', formData);
 
 function* handleLogin(formData) {
+  console.log('handleLogin');
   try {
     const res = yield call(login, formData);
     setAuthTokenOnLocalStorage(res.data.auth_token);
     yield put({ type: LOGIN_SUCCESS, payload: res.data });
   } catch (error) {
-    yield put({ type: LOGIN_ERROR, payload: error });
+    const payload = error.response.data.message;
+    yield put({ type: LOGIN_ERROR, payload });
   }
 };
 
@@ -50,7 +52,8 @@ function* handleLogout() {
     yield put({ type: LOGOUT_SUCCESS, payload: res.data });
     yield put(push('/')); 
   } catch (error) {
-    yield put({ type: LOGOUT_ERROR, payload: error });
+    const payload = error.response.data.message;
+    yield put({ type: LOGOUT_ERROR, payload });
   }
 };
 
@@ -62,7 +65,8 @@ function* handleSignup(formData) {
     setAuthTokenOnLocalStorage(res.data.auth_token);
     yield put({ type: SIGNUP_SUCCESS, payload: res.data });
   } catch (error) {
-    yield put({ type: SIGNUP_ERROR, payload: error });
+    const payload = error.response.data.message;
+    yield put({ type: SIGNUP_ERROR, payload });
   }
 };
 
@@ -80,33 +84,35 @@ function* handleFetchCurrentUser() {
     yield put({ type: FETCH_CURRENT_USER_SUCCESS, payload: res.data });
   } catch (error) {
     removeAuthTokenFromLocalStorage();
-    yield put({ type: FETCH_CURRENT_USER_ERROR, payload: error });
+    const payload = error.response.data.message;
+    yield put({ type: FETCH_CURRENT_USER_ERROR, payload });
   }
 };
 
-export function* loginFlow() {
+export function* waitingLogin() {
   while (true) {
     const { formData } = yield take(LOGIN_REQUEST);
     yield fork(handleLogin, formData);
-    yield take(LOGOUT_REQUEST);
-    yield call(handleLogout);
-  }
- };
-
-export function* signupFlow() {
-  while (true) {
-    const { formData } = yield take(SIGNUP_REQUEST);
-    yield fork(handleSignup, formData);
-    yield take(LOGOUT_REQUEST);
-    yield call(handleLogout);
   }
 };
 
-export function* currentUserFlow() {
+export function* waitingLogout() {
+  while (true) {
+    yield take(LOGOUT_REQUEST);
+    yield call(handleLogout);
+  }
+}
+
+export function* waitingSignup() {
+  while (true) {
+    const { formData } = yield take(SIGNUP_REQUEST);
+    yield fork(handleSignup, formData);
+  }
+};
+
+export function* waitingCurrentUser() {
   while (true) {
     yield take(FETCH_CURRENT_USER_REQUEST);
     yield fork(handleFetchCurrentUser);
-    yield take(LOGOUT_REQUEST);
-    yield call(handleLogout);
   }
 };

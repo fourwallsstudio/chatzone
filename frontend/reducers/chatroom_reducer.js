@@ -3,6 +3,7 @@ import { Map, List, fromJS } from 'immutable';
 export const FETCH_CHATROOMS_REQUEST = 'CHATROOM::FETCH_CHATROOMS_REQUEST';
 export const FETCH_CHATROOMS_SUCCESS = 'CHATROOM::FETCH_CHATROOMS_SUCCESS';
 export const FETCH_CHATROOMS_ERROR = 'CHATROOM::FETCH_CHATROOMS_ERROR';
+export const CONNECT_TO_SOCKET = 'CHATROOM::CONNECT_TO_SOCKET';
 export const JOIN_CHAT = 'CHATROOM::JOIN_CHAT';
 export const LEAVE_CHAT = 'CHATROOM::LEAVE_CHAT';
 export const UPDATE_CURRENT_CHAT = 'CHATROOM::UPDATE_CURRENT_CHAT'; 
@@ -13,6 +14,7 @@ export const FETCH_MEMBERS_SUCCESS = 'CHATROOM::FETCH_MEMBERS_SUCCESS';
 export const FETCH_MEMBERS_ERROR = 'CHATROOM::FETCH_MEMBERS_ERROR';
 
 export const fetchChatRooms = () => ({ type: FETCH_CHATROOMS_REQUEST });
+export const connectToSocket = () => ({ type: CONNECT_TO_SOCKET });
 export const joinChat = joinData => ({ type: JOIN_CHAT, joinData });
 export const leaveChat = leaveData => ({ type: LEAVE_CHAT, leaveData });
 export const fetchMembers = chatroom => ({ type: FETCH_MEMBERS_REQUEST, chatroom });

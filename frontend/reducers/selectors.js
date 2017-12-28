@@ -26,3 +26,13 @@ export const messageSelector = createSelector(
   )
 );
   
+export const sessionErrorSelector = state => {
+  const error = state.getIn(['session', 'error']);
+  if (error === 'Incorrect password'
+    || error === 'User does not exist'
+    || error === 'Username already exists') {
+
+    return error;
+  }
+  return '';
+}

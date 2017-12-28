@@ -12,6 +12,7 @@ const Form = styled.form`
   font-size: 24px;
   margin-top: 10px;
 `
+
 const FormField = styled.div`
   position: relative;
   width: 100%;
@@ -31,6 +32,7 @@ const FormField = styled.div`
     font-size: 12px;
   }
 `
+
 const Button = styled.button`
   border: solid 1px ghostwhite;
   padding: 0 10px;
@@ -38,6 +40,7 @@ const Button = styled.button`
     background: rgba(255, 255, 255, 0.1);
   }
 `
+
 const TextButton = styled.button`
   position: absolute;
   top: 50px;
@@ -58,7 +61,7 @@ const validate = (values) => {
 const renderInputField = ({ input, label, name, type, meta: { touched, error }}) => (
   <FormField>
     <input {...input} placeholder={label} type={type} autoComplete="off" />
-    { touched && error && <span>{error}</span> }
+    { touched && error && <span>{error}</span> } 
   </FormField>
 )
 
@@ -84,7 +87,9 @@ let SessionForm = props => {
         { formType }
       </Button>
 
-      <TextButton onClick={ updateSessionFormType } >
+      <TextButton 
+        type='button'
+        onClick={ updateSessionFormType } >
         { formType === 'login' ? 'signup' : 'login' }
       </TextButton>
     </Form>

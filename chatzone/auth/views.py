@@ -38,14 +38,16 @@ class SignUpAPI(MethodView):
         else:
             responseObject = {
                 'status': 'fail',
-                'message': 'User already exists. Please Log in.'
+                'message': 'Username already exists'
             }
-            return make_response(jsonify(responseObject)), 202
+            return make_response(jsonify(responseObject)), 422
 
 
 class LoginAPI(MethodView):
     def post(self):
         post_data = request.form if request.form else request.get_json()
+        print('login post_data: ', post_data)
+            
         try:
             user = User.query.filter_by(
                 username=post_data.get('username')
@@ -67,17 +69,17 @@ class LoginAPI(MethodView):
                 else:
                     responseObject = {
                         'status': 'fail',
-                        'message': 'Incorrect password.'
+                        'message': 'Incorrect password'
                     }
                     return make_response(jsonify(responseObject)), 422
             else:
                 responseObject = {
                     'status': 'fail',
-                    'message': 'User does not exist.'
+                    'message': 'User does not exist'
                 }
                 return make_response(jsonify(responseObject)), 404
         except Exception as e:
-            print(e)
+            print('exception: ', e)
             responseObject = {
                 'status': 'fail',
                 'message': 'Try again'

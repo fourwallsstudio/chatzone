@@ -5,12 +5,22 @@ import Title from 'components/title';
 import SessionForm from 'components/session_form';
 import { login, signup } from 'reducers/session_reducer';
 import { updateSessionFormType } from 'reducers/ui_reducer';
-import { sessionFormTypeSelector, currentUserSelector } from 'reducers/selectors';
+import { 
+  sessionFormTypeSelector, 
+  currentUserSelector,
+  sessionErrorSelector,
+} from 'reducers/selectors';
 
 const Container = styled.div`
   width: 60%;
   min-width: 730px;
   margin: 300px auto 0 auto;
+`
+
+const Error = styled.p`
+  color: red;
+  font-family: 'Roboto', monospace;
+  font-size: 12px;
 `
 
 class Landing extends React.Component {
@@ -34,12 +44,16 @@ class Landing extends React.Component {
   }
 
   render() {
-    return !this.props.loggedIn 
+    const { formType, error, loggedIn } = this.props;
+
+    return !loggedIn 
            ? (
               <Container>
                 <Title />
+                { error && <Error>{ error }</Error> }
                 <SessionForm 
-                  formType={ this.props.formType } 
+                  formType={ formType } 
+                  error={ error }
                   onSubmit={ this.handleSubmit } 
                   updateSessionFormType={ this.handleUpdateFormType } />
               </Container>
@@ -50,6 +64,7 @@ class Landing extends React.Component {
 const mapStateToProps = state => ({
   loggedIn: Boolean(currentUserSelector(state)),
   formType: sessionFormTypeSelector(state), 
+  error: sessionErrorSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
