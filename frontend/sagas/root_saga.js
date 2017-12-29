@@ -3,7 +3,8 @@ import {
   waitingLogin, 
   waitingLogout,
   waitingSignup, 
-  waitingCurrentUser 
+  waitingCurrentUser,
+  waitingUpdateCurrentUser,
 } from 'sagas/session_saga';  
 import { 
   waitingFetchChatRooms,
@@ -22,6 +23,7 @@ export default function* rootSaga() {
     waitingLogout(),
     waitingSignup(),
     waitingCurrentUser(),
+    waitingUpdateCurrentUser(),
     waitingFetchChatRooms(),
     waitingFetchMembers(),
     joinLeaveChatFlow(),

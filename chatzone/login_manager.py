@@ -34,7 +34,8 @@ class LoginManager(object):
                     'status': 'success',
                     'status_code': 200,
                     'id': user.id,
-                    'username': user.username
+                    'username': user.username,
+                    'avatar': user.avatar
                 }
                 return responseObject
             responseObject = {

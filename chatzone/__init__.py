@@ -1,5 +1,6 @@
 import os
 import redis
+import boto3
 
 from flask import Flask, json, jsonify
 from flask_sslify import SSLify
@@ -24,12 +25,20 @@ load_dotenv(dotenv_path)
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static')
 print('static: ', static_file_dir)
 
+# boto / aws s3
+# bucket_name = os.getenv('S3_BUCKET_NAME')
+s3 = boto3.client(
+    's3',
+    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
+)
+
 app = Flask(__name__)
 CORS(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-sslify = SSLify(app)
+# sslify = SSLify(app)
 socketio = SocketIO(app, async='eventlet', engineio_logger=True)
 
 app.config.from_object(os.getenv('CHATZONE_SETTINGS'))

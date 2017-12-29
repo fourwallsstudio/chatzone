@@ -10,6 +10,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(255), unique=True, nullable=False)
     password_digest = db.Column(db.String(255), nullable=False)
+    avatar = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
     messages = db.relationship('Message', backref='user', lazy=True)

@@ -5,9 +5,12 @@ import styled from 'styled-components';
 import Title from 'components/title';
 import ChatRoomIndex from '../chat_rooms_index';
 import ChatRoom from '../chat_room';
+import UserSettingsModal from '../user_settings_modal';
+import Avatar from '../avatar';
 import { logout, fetchCurrentUser } from 'reducers/session_reducer';
 import { connectToSocket, leaveChat } from 'reducers/chatroom_reducer';
 import { currentUserSelector, currentChatSelector } from 'reducers/selectors';
+import { toggleSettingsModal } from 'reducers/ui_reducer';
 import { getAuthTokenFromLocalStorage } from '../../util/session_util';
 
 const Container = styled.div`
@@ -15,16 +18,18 @@ const Container = styled.div`
   margin: 100px auto 0 auto;
 `
 const Header = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  align-items: baseline;
   margin-top: 10px;
 `
 const Welcome = styled.div`
   font-size: 16px; 
+  height: 35px;
+  line-height: 35px;
   color: ghostwhite;
-  margin-right: 10px;
+  margin: 0 10px;
 `
 const LogoutButton = styled.button`
   color: ghostwhite;
@@ -55,6 +60,11 @@ class Home extends React.Component {
     logout(id);
   }
 
+  handleToggleModal = () => {
+    console.log('toggle modal');
+    this.props.toggleSettingsModal();
+  }
+
   render() {
     const { currentUser, currentChat, path } = this.props;
     const pathAtIndex = path === '/';
@@ -63,8 +73,15 @@ class Home extends React.Component {
     return !!currentUser ? (
       <Container>
         <Header>
-          <Welcome>{ `Welcome ${ currentUser.get('username') }` }</Welcome>
+          <Welcome>Welcome</Welcome>
+          <Avatar 
+            src={ currentUser.get('avatar') }
+            scale={ 35 } 
+            isButton={ true }
+            toggleModal={ this.handleToggleModal } />
+          <Welcome>{ `${ currentUser.get('username') }` }</Welcome>
           <LogoutButton onClick={ this.handleLogout }>logout</LogoutButton>
+          <UserSettingsModal toggleModal={ this.handleToggleModal } />
         </Header>
         <Title />
         { pathAtIndex && <ChatRoomIndex /> }
@@ -86,6 +103,7 @@ const mapDispatchToProps = dispatch => ({
   fetchCurrentUser: () => dispatch(fetchCurrentUser()),
   connectToSocket: () => dispatch(connectToSocket()),
   leaveChat: data => dispatch(leaveChat(data)),
+  toggleSettingsModal: () => dispatch(toggleSettingsModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

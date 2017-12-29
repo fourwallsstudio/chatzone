@@ -63,7 +63,8 @@ class LoginAPI(MethodView):
                             'message': 'Successfully logged in.',
                             'auth_token': auth_token.decode(),
                             'id': user.id,
-                            'username': user.username
+                            'username': user.username,
+                            'avatar': user.avatar
                         }
                         return make_response(jsonify(responseObject)), 200
                 else:

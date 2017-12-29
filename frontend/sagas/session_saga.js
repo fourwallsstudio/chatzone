@@ -14,6 +14,9 @@ import {
   FETCH_CURRENT_USER_REQUEST,
   FETCH_CURRENT_USER_SUCCESS,
   FETCH_CURRENT_USER_ERROR,
+  UPDATE_CURRENT_USER_REQUEST,
+  UPDATE_CURRENT_USER_SUCCESS,
+  UPDATE_CURRENT_USER_ERROR,
 } from 'reducers/session_reducer';
 import {
   setAuthTokenOnLocalStorage,
@@ -81,11 +84,25 @@ const fetchCurrentUser = () => {
 function* handleFetchCurrentUser() {
   try {
     const res = yield call(fetchCurrentUser);
+    console.log('res', res);
     yield put({ type: FETCH_CURRENT_USER_SUCCESS, payload: res.data });
   } catch (error) {
     removeAuthTokenFromLocalStorage();
     const payload = error.response.data.message;
     yield put({ type: FETCH_CURRENT_USER_ERROR, payload });
+  }
+};
+
+const config = () => ({ headers: { 'Authorization': authHeader() } });
+const updateCurrentUser = formData => axios.post('/update_current_user', formData);
+
+function* handleUpdateCurrentUser(formData) {
+  try {
+    console.log('axios', formData.get('avatar'))
+    const res = yield call(updateCurrentUser, formData);
+    yield put({ type: UPDATE_CURRENT_USER_SUCCESS, payload: res.data });
+  } catch (error) {
+    yield put({ type: UPDATE_CURRENT_USER_ERROR, payload: error });
   }
 };
 
@@ -114,5 +131,12 @@ export function* waitingCurrentUser() {
   while (true) {
     yield take(FETCH_CURRENT_USER_REQUEST);
     yield fork(handleFetchCurrentUser);
+  }
+};
+
+export function* waitingUpdateCurrentUser() {
+  while (true) {
+    const { formData } = yield take(UPDATE_CURRENT_USER_REQUEST);
+    yield fork(handleUpdateCurrentUser, formData);
   }
 };
