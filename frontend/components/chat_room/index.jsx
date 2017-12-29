@@ -86,7 +86,7 @@ const Note = styled.div`
   border-radis: 100%;
   width: 10px;
   height: 10px;
-  filter: blur(4px);
+  filter: blur(2px);
   margin-right: 4px;
 `
 

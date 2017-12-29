@@ -38,7 +38,7 @@ CORS(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-# sslify = SSLify(app)
+sslify = SSLify(app)
 socketio = SocketIO(app, async='eventlet', engineio_logger=True)
 
 app.config.from_object(os.getenv('CHATZONE_SETTINGS'))
