@@ -19,6 +19,7 @@ import { getAuthTokenFromLocalStorage } from '../../util/session_util';
 
 const Container = styled.div`
   width: 80%;
+  min-width: 500px;
   margin: 100px auto 0 auto;
 `
 const Header = styled.div`
