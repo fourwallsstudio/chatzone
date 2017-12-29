@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+const Identicon = require('identicon.js');
 
 export const currentUserSelector = state => state.getIn(['session', 'currentUser'], '');
 
@@ -35,4 +36,28 @@ export const sessionErrorSelector = state => {
     return error;
   }
   return '';
+}
+
+export const avatarSelector = (state, member) => {
+  let username; 
+  
+  if (state) {
+    const avatar = state.getIn(['session', 'currentUser', 'avatar'])
+    if (avatar) return avatar; 
+    username = state.getIn(['session', 'currentUser', 'username'])
+  } else if (member) {
+    username = member; 
+  }
+
+  const hash = btoa(username);
+  const options = {
+    forground: [0, 0, 0, 255],
+    background: [255, 255, 255, 255],
+    size: 200,
+    format: 'svg',
+  };
+  const data = new Identicon(hash + hash, options).toString();
+  const src = `data:image/svg+xml;base64, ${data}`;
+
+  return src;
 }

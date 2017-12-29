@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import AvatarPreview from './avatar_preview';
 import AvatarForm from './avatar_form';
 import { updateCurrentUser } from 'reducers/session_reducer';
-import { currentUserSelector } from 'reducers/selectors';
+import { currentUserSelector, avatarSelector } from 'reducers/selectors';
 
 const Container = styled.div`
   position: absolute;
@@ -63,12 +63,11 @@ class UserSettingsModal extends React.Component {
   }
 
   render() {
-    const { active, currentUser } = this.props;
-    console.log('img', this.state.imagePreview)
+    const { active, avatarSrc } = this.props;
 
     return active ? (
       <Container>
-        <AvatarPreview src={ this.state.imagePreview || currentUser.get('avatar') } />
+        <AvatarPreview src={ this.state.imagePreview || avatarSrc } />
         <AvatarForm 
           onSubmit={ this.handleSubmit }
           onChange={ this.handleChange } />
@@ -80,6 +79,7 @@ class UserSettingsModal extends React.Component {
 const mapStateToProps = state => ({
   currentUser: currentUserSelector(state),
   active: state.getIn(['ui', 'settingsModalActive']),
+  avatarSrc: avatarSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({

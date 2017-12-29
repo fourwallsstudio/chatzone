@@ -9,7 +9,11 @@ import UserSettingsModal from '../user_settings_modal';
 import Avatar from '../avatar';
 import { logout, fetchCurrentUser } from 'reducers/session_reducer';
 import { connectToSocket, leaveChat } from 'reducers/chatroom_reducer';
-import { currentUserSelector, currentChatSelector } from 'reducers/selectors';
+import { 
+  currentUserSelector, 
+  currentChatSelector, 
+  avatarSelector 
+} from 'reducers/selectors';
 import { toggleSettingsModal } from 'reducers/ui_reducer';
 import { getAuthTokenFromLocalStorage } from '../../util/session_util';
 
@@ -66,7 +70,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { currentUser, currentChat, path } = this.props;
+    const { currentUser, currentChat, path, avatarSrc } = this.props;
     const pathAtIndex = path === '/';
     const chatPath = currentChat && `/${currentChat.get('chatroom')}`; 
     
@@ -75,7 +79,7 @@ class Home extends React.Component {
         <Header>
           <Welcome>Welcome</Welcome>
           <Avatar 
-            src={ currentUser.get('avatar') }
+            src={ avatarSrc }
             scale={ 35 } 
             isButton={ true }
             toggleModal={ this.handleToggleModal } />
@@ -96,6 +100,7 @@ const mapStateToProps = state => ({
   authToken: getAuthTokenFromLocalStorage(),
   currentChat: currentChatSelector(state),
   path: state.get('routing').location.pathname,
+  avatarSrc: avatarSelector(state),
 });
 
 const mapDispatchToProps = dispatch => ({
