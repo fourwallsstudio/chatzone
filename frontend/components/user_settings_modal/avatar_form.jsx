@@ -39,10 +39,8 @@ const FormField = styled.div`
   }
 
   span {
-    position: absolute;
-    top: -34px;
-    left: 10px;
-    font-size: 12px;
+    font-size: 18px;
+    color: black;
   }
 `
 
@@ -59,7 +57,18 @@ const Button = styled.button`
 `
 
 const validate = values => {
+  const allowed_file_types = ['png', 'jpg', 'jpeg', 'gif'];
   const errors = {};
+
+  const file = values.get('avatar');
+
+  if (file && file.length > 0) {
+    console.log('validate', file[0].name)
+    const ext = file[0].name.split('.')[1].toLowerCase();
+    if (!allowed_file_types.includes(ext)) {
+      errors.avatar = 'unsupported file';
+    }
+  }   
 
   return errors;
 }
@@ -68,7 +77,7 @@ const renderInputField = ({ input, children, value, name, type, meta: { touched,
   <FormField>
     <input {...input} type={type} value={value} />
     { touched && error && <span>{error}</span> }
-    { children }
+    { !error && children }
   </FormField>
 )
 

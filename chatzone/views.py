@@ -4,8 +4,9 @@ from chatzone import app, static_file_dir, db, redisCache
 from flask import jsonify, request, send_from_directory, make_response, redirect
 from chatzone.models import ChatRoom, User
 from chatzone.login_manager import login_required
-from chatzone.helpers import upload_file_to_s3
+from chatzone.helpers import upload_file_to_s3, allowed_file
 from sqlalchemy import update
+from werkzeug.utils import secure_filename
 
 @app.route('/')
 def index():
@@ -45,6 +46,11 @@ def update_current_user():
     
     if post_data['avatar']:
         file = post_data['avatar']
+        file.filename = secure_filename(file.filename)
+        
+        if not allowed_file(file):
+            return make_response('unsupported file type'), 422 
+        
         url = upload_file_to_s3(file, os.getenv('S3_BUCKET_NAME'))
         user = User.query.filter_by(id=post_form_data.get('userId')).first()
         

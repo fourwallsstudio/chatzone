@@ -102,7 +102,8 @@ function* handleUpdateCurrentUser(formData) {
     const res = yield call(updateCurrentUser, formData);
     yield put({ type: UPDATE_CURRENT_USER_SUCCESS, payload: res.data });
   } catch (error) {
-    yield put({ type: UPDATE_CURRENT_USER_ERROR, payload: error });
+    const payload = error.response.data;
+    yield put({ type: UPDATE_CURRENT_USER_ERROR, payload });
   }
 };
 

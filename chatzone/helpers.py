@@ -19,3 +19,9 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
 
     url = 'https://s3.amazonaws.com/chatzone-dev/' + file.filename
     return url
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+def allowed_file(file):
+    return file.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
