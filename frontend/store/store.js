@@ -5,23 +5,21 @@ import rootReducer from 'reducers/root_reducer'
 import rootSaga from 'sagas/root_saga';
 import { routerMiddleware } from 'react-router-redux';
 
-let logger = null;
-
-console.log('env: ', process.env.NODE_ENV)
+const sagaMiddleware = createSagaMiddleware();
+const middlewares = [ sagaMiddleware ];
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('dev mode bb');
-  logger = createLogger({
+  const logger = createLogger({
     predicate: (getState, action) => !action.type.match(/redux-form/)
   });
+  middlewares.push(logger);
 }
-
-const sagaMiddleware = createSagaMiddleware();
 
 const configureStore = (history) => {
   const store = createStore(
     rootReducer,
-    applyMiddleware(logger, sagaMiddleware, routerMiddleware(history))
+    applyMiddleware(...middlewares, routerMiddleware(history))
   )
   sagaMiddleware.run(rootSaga);
   return store;
