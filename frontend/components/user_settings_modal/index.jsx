@@ -42,7 +42,6 @@ class UserSettingsModal extends React.Component {
     formData.append('avatar', file);
     formData.append('userId', this.props.currentUser.get('id'))
 
-    console.log('handle submit', formData);
     this.setState({ imagePreview: '' });
     this.props.toggleModal();
     this.props.updateCurrentUser(formData);

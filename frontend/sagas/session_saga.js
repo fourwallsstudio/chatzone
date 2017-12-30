@@ -29,7 +29,6 @@ import {
 const login = formData => axios.post('/login', formData);
 
 function* handleLogin(formData) {
-  console.log('handleLogin');
   try {
     const res = yield call(login, formData);
     setAuthTokenOnLocalStorage(res.data.auth_token);
