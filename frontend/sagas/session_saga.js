@@ -84,7 +84,6 @@ const fetchCurrentUser = () => {
 function* handleFetchCurrentUser() {
   try {
     const res = yield call(fetchCurrentUser);
-    console.log('res', res);
     yield put({ type: FETCH_CURRENT_USER_SUCCESS, payload: res.data });
   } catch (error) {
     removeAuthTokenFromLocalStorage();
@@ -98,7 +97,6 @@ const updateCurrentUser = formData => axios.post('/update_current_user', formDat
 
 function* handleUpdateCurrentUser(formData) {
   try {
-    console.log('axios', formData.get('avatar'))
     const res = yield call(updateCurrentUser, formData);
     yield put({ type: UPDATE_CURRENT_USER_SUCCESS, payload: res.data });
   } catch (error) {

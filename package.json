@@ -10,8 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-css": "node-sass --include-path scss scss/main.scss chatzone/static/dist/main.css",
     "watch-css": "nodemon -e scss -x \"npm run build-css\"",
-    "pack": "webpack --watch",
-    "postinstall": "webpack"
+    "pack": "webpack --config webpack.dev.js --watch",
+    "build": "webpack --config webpack.prod.js",
+    "postinstall": "build"
   },
   "repository": {
     "type": "git",
@@ -61,9 +62,12 @@
     "socket.io": "^2.0.4",
     "style-loader": "^0.19.1",
     "styled-components": "^2.3.0",
+    "uglifyjs-webpack-plugin": "^1.1.5",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
-    "nodemon": "^1.13.3"
+    "nodemon": "^1.13.3",
+    "webpack-dev-server": "^2.9.7",
+    "webpack-merge": "^4.1.1"
   }
 }

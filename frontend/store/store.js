@@ -5,9 +5,16 @@ import rootReducer from 'reducers/root_reducer'
 import rootSaga from 'sagas/root_saga';
 import { routerMiddleware } from 'react-router-redux';
 
-const logger = createLogger({
-  predicate: (getState, action) => !action.type.match(/redux-form/)
-});
+let logger = null;
+
+console.log('env: ', process.env.NODE_ENV)
+
+if (process.env.NODE_ENV !== 'production') {
+  console.log('dev mode bb');
+  logger = createLogger({
+    predicate: (getState, action) => !action.type.match(/redux-form/)
+  });
+}
 
 const sagaMiddleware = createSagaMiddleware();
 

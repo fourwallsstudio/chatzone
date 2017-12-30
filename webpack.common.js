@@ -5,9 +5,8 @@ module.exports = {
   entry: ['babel-polyfill', './frontend/chatzone.jsx', './scss/main.scss'],
   output: {
     path: path.resolve(__dirname, 'chatzone', 'static', 'dist'),
-    filename: 'bundle.js',
+    filename: 'bundle.js'
   },
-  devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.jsx', '*'],
     alias: {
@@ -37,8 +36,8 @@ module.exports = {
     ],
   },
   plugins: [
-      new ExtractTextPlugin('main.css', {
+    new ExtractTextPlugin('main.css', {
       allChunks: true,
-    }),
+    })
   ],
 };
