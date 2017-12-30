@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import styled from 'styled-components';
+import { allowedFile } from '../../util/file_util';
 
 const Form = styled.form`
   position: relative;
@@ -57,15 +58,13 @@ const Button = styled.button`
 `
 
 const validate = values => {
-  const allowed_file_types = ['png', 'jpg', 'jpeg', 'gif'];
   const errors = {};
 
   const file = values.get('avatar');
 
   if (file && file.length > 0) {
     console.log('validate', file[0].name)
-    const ext = file[0].name.split('.')[1].toLowerCase();
-    if (!allowed_file_types.includes(ext)) {
+    if (!allowedFile(file[0])) {
       errors.avatar = 'unsupported file';
     }
   }   

@@ -5,6 +5,7 @@ import AvatarPreview from './avatar_preview';
 import AvatarForm from './avatar_form';
 import { updateCurrentUser } from 'reducers/session_reducer';
 import { currentUserSelector, avatarSelector } from 'reducers/selectors';
+import { allowedFile } from '../../util/file_util';
 
 const Container = styled.div`
   position: absolute;
@@ -51,14 +52,17 @@ class UserSettingsModal extends React.Component {
     const file = values.get('avatar'); 
    
     if (file.length > 0) {
-      console.log('file', file);
-      const reader = new FileReader();
+      if (allowedFile(file[0])) {
+        const reader = new FileReader();
 
-      reader.onloadend = () => {
-        this.setState({ imagePreview: reader.result });
+        reader.onloadend = () => {
+          this.setState({ imagePreview: reader.result });
+        }
+     
+        reader.readAsDataURL(file[0]);
+      } else {
+        this.setState({ imagePreview: '' });
       }
-      
-      reader.readAsDataURL(file[0]);
     }
   }
 
