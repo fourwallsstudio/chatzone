@@ -63,7 +63,6 @@ const validate = values => {
   const file = values.get('avatar');
 
   if (file && file.length > 0) {
-    console.log('validate', file[0].name)
     if (!allowedFile(file[0])) {
       errors.avatar = 'unsupported file';
     }
